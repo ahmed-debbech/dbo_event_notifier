@@ -6,14 +6,14 @@ public class Event {
     private String day;
     private String schedule;
     private String countdown;
-    private String timezone;
 
-    public Event(String name, String day, String schedule, String countdown, String timezone) {
+    public Event(String name, String day, String schedule, String countdown) {
         this.name = name;
         this.day = day;
         this.schedule = schedule;
         this.countdown = countdown;
     }
+
 
     @Override
     public String toString() {

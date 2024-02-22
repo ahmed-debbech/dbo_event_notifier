@@ -16,7 +16,6 @@ import java.util.List;
 public class Service {
 
     String htmlBody;
-    List<String> partHtmlLines;
     List<Event> events;
 
     @Autowired
@@ -24,75 +23,31 @@ public class Service {
 
     public void run(){
         grab();
-        //parse();
-        //map();
         jparse();
+
     }
 
     private void jparse(){
         Document doc = Jsoup.parse(htmlBody);
-        Element body = doc.body();
         Elements info = doc.select("#budokaiadultsolo");
         Elements trs = info.select("tr");
+        this.events = new ArrayList<>();
+
+        boolean head = true;
         for(Element tr : trs){
-
+            if(!head) {
+                Elements tds = tr.children();
+                Event ev = new Event(tds.get(0).text(),
+                        tds.get(1).text(),
+                        tds.get(2).text(),
+                        tds.get(3).text());
+                events.add(ev);
+            }
+            head = false;
         }
-        out.log(trs.toString());
+        out.log(events.toString());
     }
-    private void map(){
-        List<String> trs = new ArrayList<>();
-        int bodyTr = 0;
-        String tr = "";
-        for(String h : partHtmlLines){
-            if(h.contains("<tr>")){
-                bodyTr = 1;
-                tr = "";
-            }
-            if(bodyTr == 1){
-                tr += h;
-            }
-            if(h.contains("</tr>")){
-                bodyTr = 0;
-                tr += h;
-                trs.add(tr);
-            }
-        }
 
-
-        for(String h : trs){
-            if(h.contains("<td>")){
-                bodyTr = 1;
-                tr = "";
-            }
-            if(bodyTr == 1){
-                tr += h;
-            }
-            if(h.contains("</tr>")){
-                bodyTr = 0;
-                tr += h;
-                trs.add(tr);
-            }
-        }
-    }
-    private void parse(){
-        partHtmlLines = new ArrayList<>();
-        out.log("Parsing html...");
-        String[] lines = htmlBody.split("\n");
-        boolean startParse = false;
-
-        for(String l : lines){
-            if(l.contains("id=\"budokaiadultsolo\"")){
-                startParse = true;
-            }
-            if(startParse){
-                l = l.trim();
-                partHtmlLines.add(l);
-            }
-            if(l.contains("id=\"budokaiadultparty\"")){
-                startParse = false;
-            }
-        }
-    }
     private void grab(){
         out.log("Grabbing html ...");
         RestTemplate restTemplate = new RestTemplate();
