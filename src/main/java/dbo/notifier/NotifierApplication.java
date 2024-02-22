@@ -25,4 +25,9 @@ public class NotifierApplication {
 		service.run();
 		System.out.println("Cron Job is ended at : " + LocalTime.now());
 	}
+	@Scheduled(cron = "*/1 * * * * *")
+	public void scheduleTaskWithCronExpression() {
+		System.out.println("Scheduled task is going to run at : " + LocalTime.now());
+		service.notifyUsers();
+	}
 }
