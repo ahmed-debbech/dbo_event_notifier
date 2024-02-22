@@ -23,6 +23,6 @@ public class NotifierApplication {
 	private void scheduleWithCron() {
 		System.out.println("Cron Job is started at : " + LocalTime.now());
 		service.run();
-		System.out.println("Cron Job is started at : " + LocalTime.now());
+		System.out.println("Cron Job is ended at : " + LocalTime.now());
 	}
 }

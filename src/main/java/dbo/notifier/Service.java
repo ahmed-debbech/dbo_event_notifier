@@ -1,6 +1,10 @@
 package dbo.notifier;
 
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -20,10 +24,21 @@ public class Service {
 
     public void run(){
         grab();
-        parse();
-        map();
+        //parse();
+        //map();
+        jparse();
     }
 
+    private void jparse(){
+        Document doc = Jsoup.parse(htmlBody);
+        Element body = doc.body();
+        Elements info = doc.select("#budokaiadultsolo");
+        Elements trs = info.select("tr");
+        for(Element tr : trs){
+
+        }
+        out.log(trs.toString());
+    }
     private void map(){
         List<String> trs = new ArrayList<>();
         int bodyTr = 0;
@@ -39,6 +54,23 @@ public class Service {
             if(h.contains("</tr>")){
                 bodyTr = 0;
                 tr += h;
+                trs.add(tr);
+            }
+        }
+
+
+        for(String h : trs){
+            if(h.contains("<td>")){
+                bodyTr = 1;
+                tr = "";
+            }
+            if(bodyTr == 1){
+                tr += h;
+            }
+            if(h.contains("</tr>")){
+                bodyTr = 0;
+                tr += h;
+                trs.add(tr);
             }
         }
     }
