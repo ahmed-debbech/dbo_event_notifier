@@ -6,15 +6,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @org.springframework.stereotype.Service
 public class Service {
+
+    @Value("${telegram.url}")
+    String urlTelegram;
 
     String htmlBody;
     List<Event> events;
@@ -37,8 +44,13 @@ public class Service {
     }
     public void notifyUsers(){
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "https://dboglobal.to/events";
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl , String.class);
+        String url = urlTelegram;
+        try {
+            url += URLEncoder.encode("HEY", StandardCharsets.UTF_8.toString());
+            restTemplate.getForEntity(url , String.class);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
     private void least(){
         for(Event ev : events){
