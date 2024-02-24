@@ -35,10 +35,7 @@ public class Service {
     @Autowired
     private Logger out;
 
-    @PostConstruct
-    private void first() {
-        run();
-    }
+
     public void run(){
         out.log("");
         grab();
