@@ -26,7 +26,7 @@ public class Service {
     @Value("${telegram.url}")
     String urlTelegram;
 
-    String htmlBody;
+    String htmlBody = null;
     List<Event> events;
 
     Date nextEvent = null;
@@ -165,6 +165,10 @@ public class Service {
 
     private void jparse(){
         out.log("Parsing html ...");
+        if(htmlBody == null) {
+            out.log("not result from html");
+            return;
+        }
         Document doc = Jsoup.parse(htmlBody);
         Elements info = doc.select("#budokaiadultsolo");
         Elements trs = info.select("tr");
@@ -194,6 +198,7 @@ public class Service {
             ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
             htmlBody = response.getBody();
         }catch(Exception e){
+            out.log("crashed in reading html: " + e.getMessage());
         }
         out.log("done grabbing html.");
     }
