@@ -11,9 +11,12 @@ import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,6 +35,10 @@ public class Service {
     @Autowired
     private Logger out;
 
+    @PostConstruct
+    private void first() {
+        run();
+    }
     public void run(){
         out.log("");
         grab();
@@ -56,7 +63,7 @@ public class Service {
 
             LocalDateTime notifTime = LocalDateTime.parse(dateTime);
             if(LocalDateTime.now().isAfter(notifTime)) {
-                url += URLEncoder.encode("HEY", StandardCharsets.UTF_8.toString());
+                url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
                 restTemplate.getForEntity(url, String.class);
                 nextNotif = null;
                 nextEvent = null;
@@ -73,13 +80,12 @@ public class Service {
             Date r = new Date();
             int count = Integer.parseInt(ev.getCountdown().split(" ")[0]);
             String countUnit = ev.getCountdown().split(" ")[1].substring(0,2);
-
+            Calendar c = Calendar.getInstance();
             if(countUnit.equals("da")) {
                 r.setDate(r.getDate() + count);
             }
             if(countUnit.equals("ho")) {
                 r.setHours(r.getHours() + count);
-                System.err.println(r);
             }
             if(countUnit.equals("mi")) {
                 r.setMinutes(r.getMinutes() + count);
@@ -89,6 +95,7 @@ public class Service {
             }
             d.add(r);
         }
+        System.err.println(d);
         return d;
     }
 
@@ -141,7 +148,7 @@ public class Service {
         out.log("Getting the closest next event...");
         List<Date> d = getByCountdown();
         d = getBySchedule(d);
-        System.err.println(d);
+        //System.err.println(d);
         Date min = d.get(0);
         for(int i =1; i<=d.size()-1; i++){
             if(d.get(i).before(min)){
@@ -149,7 +156,7 @@ public class Service {
             }
         }
         this.nextEvent = min;
-        this.nextNotif = new Date(String.valueOf(min));
+        this.nextNotif = new Date(this.nextEvent.getTime());
         this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
         out.log("Next event will be: " + this.nextEvent);
         out.log("Next event reminder will be: " + this.nextNotif);
@@ -182,9 +189,12 @@ public class Service {
     private void grab(){
         out.log("Grabbing html ...");
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "https://dboglobal.to/events";
-        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl , String.class);
-        htmlBody = response.getBody();
+        try {
+            String fooResourceUrl = "https://dboglobal.to/events";
+            ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
+            htmlBody = response.getBody();
+        }catch(Exception e){
+        }
         out.log("done grabbing html.");
     }
 }
