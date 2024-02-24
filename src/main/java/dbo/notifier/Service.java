@@ -26,24 +26,19 @@ public class Service {
     String htmlBody;
     List<Event> events;
 
+    Date nextEvent = null;
     Date nextNotif = null;
 
     @Autowired
     private Logger out;
 
     public void run(){
+        out.log("");
         grab();
         jparse();
         least();
-        schedule();
     }
 
-    private void schedule(){
-        if(nextNotif == null) {
-            nextNotif = new Date();
-            nextNotif.setSeconds(nextNotif.getSeconds() + 10);
-        }
-    }
 
     public void notifyUsers(){
         if(nextNotif == null) return;
@@ -62,8 +57,9 @@ public class Service {
             LocalDateTime notifTime = LocalDateTime.parse(dateTime);
             if(LocalDateTime.now().isAfter(notifTime)) {
                 url += URLEncoder.encode("HEY", StandardCharsets.UTF_8.toString());
-                //restTemplate.getForEntity(url, String.class);
+                restTemplate.getForEntity(url, String.class);
                 nextNotif = null;
+                nextEvent = null;
             }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -83,6 +79,7 @@ public class Service {
             }
             if(countUnit.equals("ho")) {
                 r.setHours(r.getHours() + count);
+                System.err.println(r);
             }
             if(countUnit.equals("mi")) {
                 r.setMinutes(r.getMinutes() + count);
@@ -141,12 +138,26 @@ public class Service {
     }
 
     private void least(){
+        out.log("Getting the closest next event...");
         List<Date> d = getByCountdown();
         d = getBySchedule(d);
         System.err.println(d);
+        Date min = d.get(0);
+        for(int i =1; i<=d.size()-1; i++){
+            if(d.get(i).before(min)){
+                min = d.get(i);
+            }
+        }
+        this.nextEvent = min;
+        this.nextNotif = new Date(String.valueOf(min));
+        this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
+        out.log("Next event will be: " + this.nextEvent);
+        out.log("Next event reminder will be: " + this.nextNotif);
+        out.log("Finish getting the closest event");
     }
 
     private void jparse(){
+        out.log("Parsing html ...");
         Document doc = Jsoup.parse(htmlBody);
         Elements info = doc.select("#budokaiadultsolo");
         Elements trs = info.select("tr");
@@ -165,6 +176,7 @@ public class Service {
             head = false;
         }
         out.log(events.toString());
+        out.log("Finish mapping and parsing html.");
     }
 
     private void grab(){
