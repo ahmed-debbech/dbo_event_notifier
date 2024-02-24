@@ -20,7 +20,7 @@ public class NotifierApplication {
 		SpringApplication.run(NotifierApplication.class, args);
 	}
 
-	@Scheduled(cron = "* */5 * * * *")
+	@Scheduled(cron = "*/50 * * * * *")
 	private void scheduleWithCron() {
 		System.out.println("Cron Job is started at : " + LocalTime.now());
 		service.run();
