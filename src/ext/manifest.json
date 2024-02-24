@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "DBO",
+    "version": "0.1",
+    "description": "DBO",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [{
+        "matches": ["https://*/*"],
+        "js": ["script.js"]
+    }],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_icon": {
+            "16": "images.png"
+        },
+        "default_title": "Click Me",
+        "default_popup": "popup.html" 
+    },
+    "permissions": ["webRequest","storage", "activeTab", "tabs"]
+}

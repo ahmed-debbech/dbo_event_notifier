@@ -31,6 +31,7 @@ public class Service {
 
     Date nextEvent = null;
     Date nextNotif = null;
+    Date prevEvent = null;
 
     @Autowired
     private Logger out;
@@ -38,14 +39,42 @@ public class Service {
 
     public void run(){
         out.log("");
-        grab();
-        jparse();
-        least();
+        start();
     }
 
+    public void start(){
+        try {
+            SystemUtils.tryStartChromeBrowser("https://dboglobal.to/events");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public void resume(String html){
+        htmlBody = html;
+        jparse();
+        Date m = least();
+        schedule(m);
+    }
+
+    private void schedule(Date d){
+        if(this.nextNotif != null) {
+            if(this.nextEvent.compareTo(this.prevEvent) != 0) {
+                this.prevEvent = new Date(this.nextEvent.getTime());
+            }
+        }else{
+            this.prevEvent = null;
+        }
+        this.nextEvent = d;
+        this.nextNotif = new Date(this.nextEvent.getTime());
+        this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
+        out.log("Next event will be: " + this.nextEvent);
+        out.log("Next event reminder will be: " + this.nextNotif);
+        out.log("Finish getting the closest event");
+    }
     public void notifyUsers(){
         if(nextNotif == null) return;
+        if(nextEvent == prevEvent) return;
 
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;
@@ -63,7 +92,6 @@ public class Service {
                 url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
                 restTemplate.getForEntity(url, String.class);
                 nextNotif = null;
-                nextEvent = null;
             }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
@@ -141,7 +169,7 @@ public class Service {
         return d;
     }
 
-    private void least(){
+    private Date least(){
         out.log("Getting the closest next event...");
         List<Date> d = getByCountdown();
         d = getBySchedule(d);
@@ -152,12 +180,7 @@ public class Service {
                 min = d.get(i);
             }
         }
-        this.nextEvent = min;
-        this.nextNotif = new Date(this.nextEvent.getTime());
-        this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
-        out.log("Next event will be: " + this.nextEvent);
-        out.log("Next event reminder will be: " + this.nextNotif);
-        out.log("Finish getting the closest event");
+        return min;
     }
 
     private void jparse(){
@@ -187,16 +210,5 @@ public class Service {
         out.log("Finish mapping and parsing html.");
     }
 
-    private void grab(){
-        out.log("Grabbing html ...");
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            String fooResourceUrl = "https://dboglobal.to/events";
-            ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
-            htmlBody = response.getBody();
-        }catch(Exception e){
-            out.log("crashed in reading html: " + e.getMessage());
-        }
-        out.log("done grabbing html.");
-    }
+
 }
