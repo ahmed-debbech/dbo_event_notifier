@@ -15,9 +15,6 @@
         "https://*/*"
     ],
     "action": {
-        "default_icon": {
-            "16": "images.png"
-        },
         "default_title": "Click Me",
         "default_popup": "popup.html" 
     },
