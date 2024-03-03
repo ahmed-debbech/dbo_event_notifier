@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -43,6 +44,7 @@ public class Service {
     }
 
     public void start(){
+        out.log("Starting... (connectiong to dboglobal.to)" + LocalTime.now());
         try {
             SystemUtils.tryStartChromeBrowser("https://dboglobal.to/events");
         } catch (Exception e) {
@@ -55,6 +57,7 @@ public class Service {
         jparse();
         Date m = least();
         schedule(m);
+        out.log("Finishing at : " + LocalTime.now());
     }
 
     private void schedule(Date d){
