@@ -53,7 +53,7 @@ public class NotifierApplication {
 	}
 
 //	@Scheduled(cron = "0 0/10 * * * *")
-	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "*/30 * * * * *")
 
 	public void scheduleWorldBoss() {
 		System.err.println("Running world boss checked at: " + LocalTime.now());

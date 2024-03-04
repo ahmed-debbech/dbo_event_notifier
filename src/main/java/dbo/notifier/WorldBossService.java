@@ -25,6 +25,8 @@ public class WorldBossService {
     @Autowired
     private Logger out;
 
+    private boolean isNotified;
+
     @Value("${trust-store}")
     private Resource trustStore;
 
@@ -37,23 +39,33 @@ public class WorldBossService {
     public void check(){
         out.log("checking world boss progress at: " + LocalDateTime.now());
         double percentage = getPercentageValue();
-        if(is100(percentage)) notifyUsers();
+        if(is100(percentage)) {
+            if(!isNotified) {
+                notifyUsers();
+                isNotified = true;
+            }
+        }else{
+            isNotified = false;
+        }
     }
 
     private void notifyUsers(){
-        out.log("Notifying users: world boss is 100%");
+        out.log("Notifying users: world boss is 95%");
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;
         try {
-            url += URLEncoder.encode("World boss is ready 100 percent", StandardCharsets.UTF_8.toString());
+            url += URLEncoder.encode("Hurry up World boss is 95 percent. get ready.", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
         }
     }
     private boolean is100(double per){
-        if(per >= 99.99) return true;
-        return false;
+        if(per >= 95.0){
+            return true;
+        }else {
+            return false;
+        }
     }
     private double getPercentageValue(){
         out.log("retreiving api of worldboss : " + LocalDateTime.now());
