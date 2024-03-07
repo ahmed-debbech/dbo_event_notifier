@@ -35,6 +35,8 @@ public class NotifierApplication {
 	@Autowired
 	private WorldBossService worldBossService;
 
+	@Autowired
+	private SurpriseBudokaiService budokaiService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotifierApplication.class, args);
@@ -58,5 +60,13 @@ public class NotifierApplication {
 	public void scheduleWorldBoss() {
 		System.err.println("Running world boss checked at: " + LocalTime.now());
 		worldBossService.check();
+	}
+
+	@Scheduled(cron = "0 * * * * *")
+	//@Scheduled(cron = "*/1 * * * * *")
+
+	public void scheduleSurpriseBudokai() {
+		System.err.println("Running Surprise Budokai checked at: " + LocalTime.now());
+		budokaiService.check();
 	}
 }
