@@ -8,7 +8,7 @@ if(window.location.href.indexOf("dboglobal.to") > -1){
     window.onload = () =>{
             setInterval(() => {
                    location.reload()
-            },300000)
+            },60000)
 
           var xhr = new XMLHttpRequest();
           xhr.open('POST', 'http://localhost:7500/api/html', true);
