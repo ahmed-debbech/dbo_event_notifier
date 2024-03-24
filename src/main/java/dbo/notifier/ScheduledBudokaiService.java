@@ -76,6 +76,7 @@ public class ScheduledBudokaiService {
         if(!chromeOpened) start();
 
         if(eventIsDone) return;
+        if(nextNotif == null) return;
 
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;

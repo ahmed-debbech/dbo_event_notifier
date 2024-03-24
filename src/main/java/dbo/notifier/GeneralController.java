@@ -15,6 +15,9 @@ public class GeneralController {
     @CrossOrigin(origins = "*")
     @GetMapping("")
     public ResponseEntity<String> status(){
+        if(scheduledBudokaiService.nextEvent == null)
+            return new ResponseEntity<>("no event is registred yet" ,HttpStatus.OK);
+
         String s = "{ next event will be: " + scheduledBudokaiService.nextEvent.toString() + ", next notify will be: " + scheduledBudokaiService.nextNotif.toString() + " }";
        return new ResponseEntity<>(s ,HttpStatus.OK);
     }
