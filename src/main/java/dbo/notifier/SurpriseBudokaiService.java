@@ -23,8 +23,7 @@ import java.util.Map;
 @Service
 public class SurpriseBudokaiService {
 
-    @Autowired
-    private Logger out;
+    private LogSurprise out = new LogSurprise();
 
     private int apiReturnedValue = 0;
 

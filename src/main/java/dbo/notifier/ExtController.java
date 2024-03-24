@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 public class ExtController {
 
     @Autowired
-    private Service service;
+    private ScheduledBudokaiService scheduledBudokaiService;
 
     @CrossOrigin(origins = "*")
     @PostMapping("/html")
     public void html(@RequestBody String name) {
-        service.resume(name);
+        scheduledBudokaiService.resume(name);
     }
 }

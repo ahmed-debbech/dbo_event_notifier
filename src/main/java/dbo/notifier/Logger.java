@@ -6,19 +6,24 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
-@Service
 public class Logger {
 
-    @Value("${filename}")
-    private String fileName;
+    private String fileName = "log";
 
-    public void log(String s){
+
+    public void write(String s, String channel){
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(fileName, true));
             writer.append('\n');
-            writer.append(s);
+            writer.append("[ "+ LocalDateTime.now() +" ]    => " + s);
+            writer.close();
+
+            writer = new BufferedWriter(new FileWriter(fileName + "_" + channel, true));
+            writer.append('\n');
+            writer.append("[ "+ LocalDateTime.now() +" ]    => " + s);
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

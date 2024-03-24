@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 @org.springframework.stereotype.Service
-public class Service {
+public class ScheduledBudokaiService {
 
     @Value("${telegram.url}")
     String urlTelegram;
@@ -26,43 +26,46 @@ public class Service {
 
     Date nextEvent = null;
     Date nextNotif = null;
-    Date prevEvent = null;
+    String comparator = null;
 
-    @Autowired
-    private Logger out;
+    boolean eventIsDone = false;
 
+    private boolean chromeOpened = false;
 
-    public void run(){
-        out.log("");
-        start();
-    }
+    private LogScheduled out = new LogScheduled() ;
+
 
     public void start(){
-        out.log("Starting... (connectiong to dboglobal.to)" + LocalTime.now());
+        out.log("Launching chrome... (connectiong to dboglobal.to)");
         try {
             SystemUtils.tryStartChromeBrowser("https://dboglobal.to/events");
+            chromeOpened = true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public void resume(String html){
+        out.log("Checking server for updates");
         htmlBody = html;
         jparse();
-        Date m = least();
-        schedule(m);
-        out.log("Finishing at : " + LocalTime.now());
+        Date nextEvent = least();
+        System.err.println(nextEvent);
+        schedule(nextEvent);
+        out.log("finish checking server");
     }
 
     private void schedule(Date d){
-        if(this.nextNotif != null) {
-            if(this.nextEvent.compareTo(this.prevEvent) != 0) {
-                this.prevEvent = new Date(this.nextEvent.getTime());
+
+        if(eventIsDone){
+            if(!this.comparator.equals(d.toString())){
+                eventIsDone = false;
+            }else{
+                return;
             }
-        }else{
-            this.prevEvent = null;
         }
         this.nextEvent = d;
+        this.comparator = nextEvent.toString();
         this.nextNotif = new Date(this.nextEvent.getTime());
         this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
         out.log("Next event will be: " + this.nextEvent);
@@ -70,8 +73,9 @@ public class Service {
         out.log("Finish getting the closest event");
     }
     public void notifyUsers(){
-        if(nextNotif == null) return;
-        if(nextEvent == prevEvent) return;
+        if(!chromeOpened) start();
+
+        if(eventIsDone) return;
 
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;
@@ -87,8 +91,10 @@ public class Service {
             LocalDateTime notifTime = LocalDateTime.parse(dateTime);
             if(LocalDateTime.now().isAfter(notifTime)) {
                 url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
-                restTemplate.getForEntity(url, String.class);
+                System.err.println("NOTIFY");
+                //restTemplate.getForEntity(url, String.class);
                 nextNotif = null;
+                this.eventIsDone = true;
             }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);

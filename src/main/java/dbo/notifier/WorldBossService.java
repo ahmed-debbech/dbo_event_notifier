@@ -22,8 +22,7 @@ import java.time.LocalDateTime;
 @Service
 public class WorldBossService {
 
-    @Autowired
-    private Logger out;
+    private LogWorldBoss out = new LogWorldBoss();
 
     private boolean isNotified;
 
