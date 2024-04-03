@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.PostConstruct;
 @EnableScheduling
 @SpringBootApplication
 public class NotifierApplication {
@@ -19,6 +20,12 @@ public class NotifierApplication {
 	@Autowired
 	private SurpriseBudokaiService budokaiService;
 
+	@Autowired
+	private AppNotifierService appNotifierService;
+	@PostConstruct
+	private void postConstruct() {
+		appNotifierService.init();
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(NotifierApplication.class, args);
 	}
@@ -30,7 +37,7 @@ public class NotifierApplication {
 
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
 	public void scheduleWorldBoss() {
-		worldBossService.check();
+		//worldBossService.check();
 	}
 
 	@Scheduled(cron = "0 * * * * *") //every minute

@@ -1,4 +1,7 @@
 log
+log_sched
+log_world
+log_surp
 target
 .idea
 src/main/resources/application.properties
