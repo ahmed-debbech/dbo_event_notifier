@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -15,10 +16,13 @@ import java.util.List;
 @Service
 public class AppNotifierService {
 
+    @Value("${firebase.path}")
+    private String path;
+
     public void init(){
         FileInputStream serviceAccount = null;
         try {
-            serviceAccount = new FileInputStream("/home/ahmed/dbog-firebase-adminsdsk.json");
+            serviceAccount = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
