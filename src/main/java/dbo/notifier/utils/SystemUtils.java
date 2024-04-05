@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.utils;
 
 public class SystemUtils {
     public static boolean tryStartChromeBrowser(String url) throws Exception{

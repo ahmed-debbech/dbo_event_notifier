@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class AppNotifierService {
+public class AppNotificationService {
 
     @Value("${firebase.path}")
     private String path;
@@ -31,6 +31,7 @@ public class AppNotifierService {
         try {
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl("https://dbog-c2d7a-default-rtdb.europe-west1.firebasedatabase.app/")
                     .build();
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -21,7 +21,7 @@ public class NotifierApplication {
 	private SurpriseBudokaiService budokaiService;
 
 	@Autowired
-	private AppNotifierService appNotifierService;
+	private AppNotificationService appNotifierService;
 	@PostConstruct
 	private void postConstruct() {
 		appNotifierService.init();

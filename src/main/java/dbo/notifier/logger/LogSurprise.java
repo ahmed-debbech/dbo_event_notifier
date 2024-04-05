@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.logger;
 
 public class LogSurprise extends Logger{
     public void log(String s){

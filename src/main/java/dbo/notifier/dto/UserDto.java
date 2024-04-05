@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.dto;
 
 import java.time.LocalDateTime;
 
@@ -20,5 +20,13 @@ public class UserDto {
 
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "fcmToken='" + fcmToken + '\'' +
+                ", lastOpening=" + lastOpening +
+                '}';
     }
 }

@@ -1,7 +1,4 @@
-package dbo.notifier;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+package dbo.notifier.logger;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
