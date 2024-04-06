@@ -1,7 +1,8 @@
-package dbo.notifier;
+package dbo.notifier.services;
 
 
 import dbo.notifier.logger.LogScheduled;
+import dbo.notifier.model.Event;
 import dbo.notifier.utils.SystemUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,8 +25,8 @@ public class ScheduledBudokaiService {
     String htmlBody = null;
     List<Event> events;
 
-    Date nextEvent = null;
-    Date nextNotif = null;
+    public Date nextEvent = null;
+    public Date nextNotif = null;
     String comparator = null;
 
     boolean eventIsDone = false;

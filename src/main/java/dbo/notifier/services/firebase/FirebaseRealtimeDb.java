@@ -1,11 +1,12 @@
-package dbo.notifier.services;
+package dbo.notifier.services.firebase;
 
 import com.google.firebase.database.*;
 import dbo.notifier.model.User;
+import dbo.notifier.services.IDatabaseApi;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FirebaseRealtimeDb implements IDatabaseApi{
+public class FirebaseRealtimeDb implements IDatabaseApi {
     @Override
     public void createUser(User user) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/"+user.getFcmToken());

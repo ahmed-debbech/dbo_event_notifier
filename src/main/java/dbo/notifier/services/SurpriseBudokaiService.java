@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.services;
 
 import dbo.notifier.logger.LogSurprise;
 import org.apache.http.client.HttpClient;

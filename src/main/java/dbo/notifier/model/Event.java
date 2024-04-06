@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.model;
 
 
 public class Event {

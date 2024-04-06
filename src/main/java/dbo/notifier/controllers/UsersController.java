@@ -1,4 +1,4 @@
-package dbo.notifier;
+package dbo.notifier.controllers;
 
 import dbo.notifier.dto.UserDto;
 import dbo.notifier.services.IUsersManagement;

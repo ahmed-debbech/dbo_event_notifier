@@ -1,5 +1,9 @@
 package dbo.notifier;
 
+import dbo.notifier.services.ScheduledBudokaiService;
+import dbo.notifier.services.SurpriseBudokaiService;
+import dbo.notifier.services.WorldBossService;
+import dbo.notifier.services.firebase.AppNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
