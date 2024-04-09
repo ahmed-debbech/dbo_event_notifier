@@ -5,6 +5,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class SurpriseBudokaiService {
 
     private LogSurprise out = new LogSurprise();
+    @Autowired
+    private IDatabaseApi database;
 
     private int apiReturnedValue = 0;
 
@@ -110,6 +113,7 @@ public class SurpriseBudokaiService {
         try {
             url += URLEncoder.encode("SURPRISE adult solo Budokai is starting NOW", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
+            database.addNewEvent("Adult Solo - BUdokai", LocalDateTime.now().toString());
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
         }

@@ -1,10 +1,17 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.dto.NextEventDto;
+import dbo.notifier.model.FirebaseEvent;
+import dbo.notifier.model.FirebaseEvents;
+import dbo.notifier.services.IDatabaseApi;
 import dbo.notifier.services.ScheduledBudokaiService;
+import dbo.notifier.utils.ResultRetreiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("s")
@@ -12,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class GeneralController {
     @Autowired
     private ScheduledBudokaiService scheduledBudokaiService;
+
+    @Autowired
+    private IDatabaseApi databaseApi;
 
     @CrossOrigin(origins = "*")
     @GetMapping("")
@@ -21,5 +31,22 @@ public class GeneralController {
 
         String s = "{ next event will be: " + scheduledBudokaiService.nextEvent.toString() + ", next notify will be: " + scheduledBudokaiService.nextNotif.toString() + " }";
        return new ResponseEntity<>(s ,HttpStatus.OK);
+    }
+    @GetMapping("/past_events")
+    public ResponseEntity<List<FirebaseEvents>> events(){
+        int pid = databaseApi.getAll();
+        List<FirebaseEvents> s = (List<FirebaseEvents>)ResultRetreiver.getInstance().waitFor(pid);
+        System.err.println(s);
+        return new ResponseEntity<>(s ,HttpStatus.OK);
+    }
+    @GetMapping("/next")
+    public ResponseEntity<NextEventDto> next(){
+        if(scheduledBudokaiService.nextEvent == null)
+            return new ResponseEntity<>(null ,HttpStatus.NOT_FOUND);
+
+        NextEventDto ned = new NextEventDto();
+        ned.setNextEvent(String.valueOf(scheduledBudokaiService.nextEvent.getTime()));
+        ned.setNextNotification(String.valueOf(scheduledBudokaiService.nextNotif.getTime()));
+        return new ResponseEntity<>(ned ,HttpStatus.OK);
     }
 }

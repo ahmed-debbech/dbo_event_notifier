@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
@@ -35,6 +36,8 @@ public class ScheduledBudokaiService {
 
     private LogScheduled out = new LogScheduled() ;
 
+    @Autowired
+    private IDatabaseApi database;
 
     public void start(){
         out.log("Launching chrome... (connectiong to dboglobal.to)");
@@ -69,6 +72,7 @@ public class ScheduledBudokaiService {
         this.comparator = nextEvent.toString();
         this.nextNotif = new Date(this.nextEvent.getTime());
         this.nextNotif.setMinutes(this.nextNotif.getMinutes() - 10);
+
         out.log("Next event will be: " + this.nextEvent);
         out.log("Next event reminder will be: " + this.nextNotif);
         out.log("Finish getting the closest event");
@@ -95,6 +99,9 @@ public class ScheduledBudokaiService {
                 url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
                 System.err.println("NOTIFY");
                 restTemplate.getForEntity(url, String.class);
+                notifTime = notifTime.withMinute(0);
+                notifTime = notifTime.minusHours(notifTime.getHour()+1);
+                database.addNewEvent("Adult Solo - BUdokai", notifTime.toString());
                 nextNotif = null;
                 this.eventIsDone = true;
             }
