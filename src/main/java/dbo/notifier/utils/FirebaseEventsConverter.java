@@ -15,7 +15,10 @@ public class FirebaseEventsConverter {
             FirebaseEvents fi = new FirebaseEvents();
             fi.uuid = (String) entry.getKey();
             //fi.fe = (FirebaseEvent) entry.getValue();
-            fi.fe = new FirebaseEvent(new ArrayList<>(entry.getValue().entrySet()).get(0).getValue(), new ArrayList<>(entry.getValue().entrySet()).get(1).getValue());
+            fi.fe = new FirebaseEvent(
+                    new ArrayList<>(entry.getValue().entrySet()).get(0).getValue(),
+                    new ArrayList<>(entry.getValue().entrySet()).get(1).getValue()
+            );
             //System.err.println(entry.getValue().toString());
             fes.add(fi);
         }
