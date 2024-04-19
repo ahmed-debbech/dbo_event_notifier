@@ -1,10 +1,12 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.dto.NextEventDto;
 import dbo.notifier.model.FirebaseEvent;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.services.IDatabaseApi;
 import dbo.notifier.services.ScheduledBudokaiService;
+import dbo.notifier.services.WorldBossService;
 import dbo.notifier.utils.ResultRetreiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,8 @@ public class GeneralController {
 
     @Autowired
     private IDatabaseApi databaseApi;
+    @Autowired
+    private WorldBossService worldBossService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("")
@@ -48,5 +52,21 @@ public class GeneralController {
         ned.setNextEvent(String.valueOf(scheduledBudokaiService.nextEvent.getTime()));
         ned.setNextNotification(String.valueOf(scheduledBudokaiService.nextNotif.getTime()));
         return new ResponseEntity<>(ned ,HttpStatus.OK);
+    }
+    @GetMapping("/past_boss")
+    public ResponseEntity<List<String>> d(){
+        List<String> boss = worldBossService.getAllBoss();
+        return new ResponseEntity<>(boss ,HttpStatus.OK);
+    }
+    @PostMapping("/news")
+    public ResponseEntity<Boolean> n(@RequestBody NewsMessage newsMessage){
+        boolean b = databaseApi.addNews(newsMessage);
+        return new ResponseEntity<>(b ,HttpStatus.OK);
+    }
+    @GetMapping("/news")
+    public ResponseEntity<List<NewsMessage>> m(){
+        int pid = databaseApi.getNews();
+        List<NewsMessage> ff = (List<NewsMessage>)ResultRetreiver.getInstance().waitFor(pid);
+        return new ResponseEntity<>(ff ,HttpStatus.OK);
     }
 }

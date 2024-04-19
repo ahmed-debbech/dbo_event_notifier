@@ -1,5 +1,6 @@
 package dbo.notifier.services;
 
+import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.model.User;
 
 import java.util.List;
@@ -14,4 +15,10 @@ public interface IDatabaseApi {
     int getAll();
 
     void addNewWorldBoss(String toString);
+
+    int allBoss();
+
+    boolean addNews(NewsMessage newsMessage);
+
+    int getNews();
 }

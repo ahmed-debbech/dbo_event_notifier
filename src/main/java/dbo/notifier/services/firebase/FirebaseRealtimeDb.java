@@ -1,6 +1,7 @@
 package dbo.notifier.services.firebase;
 
 import com.google.firebase.database.*;
+import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.model.FirebaseEvent;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.User;
@@ -11,9 +12,7 @@ import dbo.notifier.utils.UUIDGen;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FirebaseRealtimeDb implements IDatabaseApi {
@@ -70,5 +69,64 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         map.put(UUIDGen.generate(), time);
         ref.setValueAsync(map);
     }
+
+    @Override
+    public int allBoss() {
+        int n = UUIDGen.fourNumbers();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("boss");
+        ref.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.err.println(dataSnapshot);
+                Map<String,String> map = (Map<String,String>) dataSnapshot.getValue();
+                List<String> fes = new ArrayList<String>(map.values());
+                ResultRetreiver.getInstance().add(n, fes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }));
+        return n;
+    }
+
+    @Override
+    public boolean addNews(NewsMessage newsMessage) {
+        try {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/news/" + UUIDGen.generate());
+            newsMessage.setTime(String.valueOf(new Date().getTime()));
+            ref.setValueAsync(newsMessage);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int getNews() {
+        int n = UUIDGen.fourNumbers();
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("news");
+        ref.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.err.println(dataSnapshot);
+                Map<String,NewsMessage> map = (Map<String,NewsMessage>) dataSnapshot.getValue();
+                List<NewsMessage> fes = new ArrayList<NewsMessage>(map.values());
+                ResultRetreiver.getInstance().add(n, fes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }));
+        return n;
+    }
+
 
 }

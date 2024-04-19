@@ -1,6 +1,8 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogWorldBoss;
+import dbo.notifier.model.FirebaseEvents;
+import dbo.notifier.utils.ResultRetreiver;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
@@ -19,6 +21,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class WorldBossService {
@@ -102,4 +105,8 @@ public class WorldBossService {
         return d;
     }
 
+    public List<String> getAllBoss(){
+        int pid = database.allBoss();
+        return (List<String>) ResultRetreiver.getInstance().waitFor(pid);
+    }
 }
