@@ -63,4 +63,12 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         return n;
     }
 
+    @Override
+    public void addNewWorldBoss(String time) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/boss/");
+        Map<String, String> map = new HashMap<>();
+        map.put(UUIDGen.generate(), time);
+        ref.setValueAsync(map);
+    }
+
 }

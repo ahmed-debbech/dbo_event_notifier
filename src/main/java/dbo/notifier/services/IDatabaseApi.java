@@ -12,4 +12,6 @@ public interface IDatabaseApi {
     void addNewEvent(String eventName, String time);
 
     int getAll();
+
+    void addNewWorldBoss(String toString);
 }

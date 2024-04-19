@@ -5,6 +5,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class WorldBossService {
@@ -33,6 +35,9 @@ public class WorldBossService {
 
     @Value("${telegram.url}")
     String urlTelegram;
+
+    @Autowired
+    private IDatabaseApi database;
 
     public void check(){
         out.log("checking world boss progress at: " + LocalDateTime.now());
@@ -54,6 +59,7 @@ public class WorldBossService {
         try {
             url += URLEncoder.encode("Hurry up World boss is 95 percent. get ready.", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
+            database.addNewWorldBoss(String.valueOf(new Date().getTime()));
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
         }

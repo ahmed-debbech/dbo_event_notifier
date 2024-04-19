@@ -41,7 +41,7 @@ public class NotifierApplication {
 
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
 	public void scheduleWorldBoss() {
-		//worldBossService.check();
+		worldBossService.check();
 	}
 
 	@Scheduled(cron = "0 * * * * *") //every minute
