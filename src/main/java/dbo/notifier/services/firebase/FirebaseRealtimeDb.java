@@ -2,7 +2,6 @@ package dbo.notifier.services.firebase;
 
 import com.google.firebase.database.*;
 import dbo.notifier.dto.NewsMessage;
-import dbo.notifier.model.FirebaseEvent;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.User;
 import dbo.notifier.services.IDatabaseApi;
@@ -11,7 +10,6 @@ import dbo.notifier.utils.ResultRetreiver;
 import dbo.notifier.utils.UUIDGen;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Service
@@ -64,9 +62,10 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public void addNewWorldBoss(String time) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/boss/");
+        String uuid = UUIDGen.generate();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/boss/"+uuid);
         Map<String, String> map = new HashMap<>();
-        map.put(UUIDGen.generate(), time);
+        map.put("time", time);
         ref.setValueAsync(map);
     }
 
@@ -79,9 +78,13 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.err.println(dataSnapshot);
-                Map<String,String> map = (Map<String,String>) dataSnapshot.getValue();
-                List<String> fes = new ArrayList<String>(map.values());
+                Map<?,Map<?, String>> map = (Map<?,Map<?,String>>) dataSnapshot.getValue();
+                List<String> ss = new ArrayList<>();
+                for(Map<?, String> innerMap : map.values()){
+                    ss.addAll(innerMap.values());
+                }
+                List<String> fes = new ArrayList<String>(ss);
+
                 ResultRetreiver.getInstance().add(n, fes);
             }
 

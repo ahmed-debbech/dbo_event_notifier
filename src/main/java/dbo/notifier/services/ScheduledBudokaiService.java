@@ -101,7 +101,7 @@ public class ScheduledBudokaiService {
                 restTemplate.getForEntity(url, String.class);
                 notifTime = notifTime.withMinute(0);
                 notifTime = notifTime.minusHours(notifTime.getHour()+1);
-                database.addNewEvent("[scheduled]", notifTime.toString());
+                database.addNewEvent("[done]", notifTime.toString());
                 nextNotif = null;
                 this.eventIsDone = true;
             }
