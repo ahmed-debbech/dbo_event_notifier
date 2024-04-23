@@ -14,17 +14,10 @@ public class UsersController {
     @Autowired
     private IUsersManagement usersManagement;
 
-    @PostMapping("/register")
+    @PostMapping("/refresh")
     public ResponseEntity<String> register(@RequestBody UserDto userDto){
         //System.err.println(userDto);
-        usersManagement.registerNewUser(userDto.getFcmToken());
-        return new ResponseEntity<>("hey" ,HttpStatus.OK);
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<String> refresh(@RequestBody UserDto userDto){
-        //System.err.println(userDto);
-        usersManagement.refreshExistingUser(userDto.getFcmToken());
+        usersManagement.registerOrRefresh(userDto.getFcmToken());
         return new ResponseEntity<>("hey" ,HttpStatus.OK);
     }
 }

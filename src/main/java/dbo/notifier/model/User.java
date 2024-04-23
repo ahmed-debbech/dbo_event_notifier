@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public class User {
 
     private String fcmToken; //id
-    private LocalDateTime createdAt;
-    private LocalDateTime lastOpening;
+    private String createdAt;
+    private String lastOpening;
 
     public User() {
     }
@@ -21,19 +21,19 @@ public class User {
     }
 
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getLastOpening() {
+    public String getLastOpening() {
         return lastOpening;
     }
 
-    public void setLastOpening(LocalDateTime lastOpening) {
+    public void setLastOpening(String lastOpening) {
         this.lastOpening = lastOpening;
     }
 
