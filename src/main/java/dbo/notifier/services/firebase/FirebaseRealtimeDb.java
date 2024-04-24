@@ -2,6 +2,8 @@ package dbo.notifier.services.firebase;
 
 import com.google.firebase.database.*;
 import dbo.notifier.dto.NewsMessage;
+import dbo.notifier.logger.FBLogger;
+import dbo.notifier.logger.LogSurprise;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.User;
 import dbo.notifier.services.IDatabaseApi;
@@ -15,6 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class FirebaseRealtimeDb implements IDatabaseApi {
+
+    private FBLogger out = new FBLogger();
+
     @Override
     public void createUser(User user) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/"+user.getFcmToken());
@@ -31,6 +36,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public void addNewEvent(String eventName, String time) {
+        out.log("a new event is being added");
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/events/"+ UUIDGen.generate());
         Map<String, String> map = new HashMap<>();
         map.put("name", eventName);
@@ -40,6 +46,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public int getAll() {
+        out.log("getting all events");
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -63,6 +70,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public void addNewWorldBoss(String time) {
+        out.log("a new world boss is being added");
         String uuid = UUIDGen.generate();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/boss/"+uuid);
         Map<String, String> map = new HashMap<>();
@@ -72,6 +80,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public int allBoss() {
+        out.log("retreiving all bosses");
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -99,6 +108,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public boolean addNews(NewsMessage newsMessage) {
+        out.log("adding new News Message");
         try {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/news/" + UUIDGen.generate());
             newsMessage.setTime(String.valueOf(new Date().getTime()));
@@ -111,6 +121,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public int getNews() {
+        out.log("getting all news");
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -134,6 +145,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public int getAllFcm() {
+        out.log("getting all fcm tokens");
         int n = UUIDGen.fourNumbers();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("/users");
@@ -152,6 +164,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public void registerOrRefreshUser(String fcmToken) {
+        out.log("registering or refreshing a new user");
         User us = new User();
         us.setFcmToken(fcmToken);
         us.setLastOpening(String.valueOf(new Date().getTime()));
@@ -162,9 +175,11 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.err.println(dataSnapshot);
                 if(dataSnapshot.getValue() != null) {
+                    out.log("User: [[" + fcmToken + "]] has entered.");
                     String timest = ((Map<String, String>) dataSnapshot.getValue()).get("createdAt");
                     us.setCreatedAt(timest);
                 }else {
+                    out.log("Creating new user with : [" +fcmToken+"]" );
                     us.setCreatedAt(String.valueOf(new Date().getTime()));
                 }
                 createUser(us);

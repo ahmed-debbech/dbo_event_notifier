@@ -29,7 +29,7 @@ public class ResultRetreiver {
     }
 
     public Object waitFor(int pid) {
-        long i = 10;
+        long i = 30;
         while(i>0){
             try {
                 Thread.sleep(500);

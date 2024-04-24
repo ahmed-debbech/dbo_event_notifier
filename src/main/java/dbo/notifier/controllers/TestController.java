@@ -25,8 +25,7 @@ public class TestController {
     private IDatabaseApi database;
     @Autowired
     private AppNotificationService appNotificationService;
-    @Autowired
-    private UsersManagement usersManagement;
+
 
     @PostMapping("/boss")
     public ResponseEntity<Boolean> firebaseAddBoss(){
@@ -40,7 +39,6 @@ public class TestController {
     }
     @GetMapping("/notif")
     public void notif(){
-        List<String> users = usersManagement.getAllFcm();
-        appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO, users);
+        appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
     }
 }

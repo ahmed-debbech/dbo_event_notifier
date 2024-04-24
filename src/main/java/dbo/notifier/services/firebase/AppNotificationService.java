@@ -4,7 +4,10 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import dbo.notifier.logger.FBLogger;
 import dbo.notifier.services.ServiceType;
+import dbo.notifier.services.UsersManagement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,11 @@ import java.util.List;
 
 @Service
 public class AppNotificationService {
+
+    private FBLogger out = new FBLogger();
+
+    @Autowired
+    private UsersManagement usersManagement;
 
     @Value("${firebase.path}")
     private String path;
@@ -41,23 +49,33 @@ public class AppNotificationService {
         FirebaseApp.initializeApp(options);
     }
 
-    public void sendNotif(ServiceType serviceType, List<String> userIds){
+    public void sendNotif(ServiceType serviceType){
 
+        out.log("about to send new notification-----------");
+        List<String> userIds = usersManagement.getAllFcm();
 
-        List<String> registrationTokens = userIds;
+        for(String ids : userIds){
+            out.log("sending notification to " + ids);
+            Message message = Message.builder()
+                    .setNotification(Notification.builder()
+                            .setTitle(ids.substring(0,3))
+                            .setBody("bnbnbn")
+                            .build())
+                    .setToken(ids)
+                    .build();
 
-        MulticastMessage message = MulticastMessage.builder()
-                .putData("score", "850")
-                .putData("time", "2:45")
-                .addAllTokens(registrationTokens)
-                .build();
-
-        BatchResponse response = null;
-        try {
-            response = FirebaseMessaging.getInstance().sendMulticast(message);
-        } catch (FirebaseMessagingException e) {
-            throw new RuntimeException(e);
+            String response;
+            try {
+                // Send the message
+                response = FirebaseMessaging.getInstance().send(message);
+                System.out.println("Successfully sent message: " + response);
+                out.log("done sending notification to " + ids);
+            } catch (Exception e) {
+                out.log("couldn't send notification to " + ids);
+                System.err.println("Error sending message: " + e.getMessage());
+            }
         }
-        System.out.println("Successfully sent message: " + response.getSuccessCount());
+        out.log("done sending to all notifications");
+        System.out.println("Successfully sent messages" );
     }
 }
