@@ -3,6 +3,7 @@ package dbo.notifier.services;
 
 import dbo.notifier.logger.LogScheduled;
 import dbo.notifier.model.Event;
+import dbo.notifier.services.firebase.AppNotificationService;
 import dbo.notifier.utils.SystemUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +39,8 @@ public class ScheduledBudokaiService {
 
     @Autowired
     private IDatabaseApi database;
+    @Autowired
+    private AppNotificationService appNotificationService;
 
     public void start(){
         out.log("Launching chrome... (connectiong to dboglobal.to)");
@@ -102,6 +105,7 @@ public class ScheduledBudokaiService {
                 notifTime = notifTime.withMinute(0);
                 notifTime = notifTime.minusHours(notifTime.getHour()+1);
                 database.addNewEvent("[done]", notifTime.toString());
+                appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
                 nextNotif = null;
                 this.eventIsDone = true;
             }

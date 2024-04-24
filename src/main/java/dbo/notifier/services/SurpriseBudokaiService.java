@@ -1,6 +1,7 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogSurprise;
+import dbo.notifier.services.firebase.AppNotificationService;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
@@ -27,6 +28,8 @@ public class SurpriseBudokaiService {
     private LogSurprise out = new LogSurprise();
     @Autowired
     private IDatabaseApi database;
+    @Autowired
+    private AppNotificationService appNotificationService;
 
     private int apiReturnedValue = 0;
 
@@ -114,6 +117,7 @@ public class SurpriseBudokaiService {
             url += URLEncoder.encode("SURPRISE adult solo Budokai is starting NOW", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
             database.addNewEvent("[surprise]", LocalDateTime.now().toString());
+            appNotificationService.sendNotif(ServiceType.SURP_BUDO);
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
         }

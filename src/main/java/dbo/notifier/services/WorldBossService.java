@@ -2,6 +2,7 @@ package dbo.notifier.services;
 
 import dbo.notifier.logger.LogWorldBoss;
 import dbo.notifier.model.FirebaseEvents;
+import dbo.notifier.services.firebase.AppNotificationService;
 import dbo.notifier.utils.ResultRetreiver;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -41,6 +42,8 @@ public class WorldBossService {
 
     @Autowired
     private IDatabaseApi database;
+    @Autowired
+    private AppNotificationService appNotificationService;
 
     public void check(){
         out.log("checking world boss progress at: " + LocalDateTime.now());
@@ -63,6 +66,7 @@ public class WorldBossService {
             url += URLEncoder.encode("Hurry up World boss is 95 percent. get ready.", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
             database.addNewWorldBoss(String.valueOf(new Date().getTime()));
+            appNotificationService.sendNotif(ServiceType.WORLD_BOSS);
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
         }
