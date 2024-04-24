@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import dbo.notifier.services.ServiceType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +41,10 @@ public class AppNotificationService {
         FirebaseApp.initializeApp(options);
     }
 
-    public void sendNotif(){
+    public void sendNotif(ServiceType serviceType, List<String> userIds){
 
-        List<String> registrationTokens = Arrays.asList(
-                "YOUR_REGISTRATION_TOKEN_1",
-                // ...
-                "YOUR_REGISTRATION_TOKEN_n"
-        );
+
+        List<String> registrationTokens = userIds;
 
         MulticastMessage message = MulticastMessage.builder()
                 .putData("score", "850")

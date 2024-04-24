@@ -21,4 +21,7 @@ public interface IDatabaseApi {
     boolean addNews(NewsMessage newsMessage);
 
     int getNews();
+    int getAllFcm();
+
+    void registerOrRefreshUser(String fcmToken);
 }

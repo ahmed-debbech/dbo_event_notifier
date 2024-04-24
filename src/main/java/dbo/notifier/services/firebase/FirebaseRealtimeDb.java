@@ -11,6 +11,7 @@ import dbo.notifier.utils.UUIDGen;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FirebaseRealtimeDb implements IDatabaseApi {
@@ -129,6 +130,47 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
             }
         }));
         return n;
+    }
+
+    @Override
+    public int getAllFcm() {
+        int n = UUIDGen.fourNumbers();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("/users");
+        ref.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.err.println(dataSnapshot);
+                List<String> fcms = ((Map<String, ?>) dataSnapshot.getValue()).keySet().stream().collect(Collectors.toList());
+                System.err.println(fcms);
+                ResultRetreiver.getInstance().add(n, fcms);
+            }
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        }));
+        return n;
+    }
+
+    @Override
+    public void registerOrRefreshUser(String fcmToken) {
+        User us = new User();
+        us.setFcmToken(fcmToken);
+        us.setLastOpening(String.valueOf(new Date().getTime()));
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("/users/" + fcmToken);
+        ref.addListenerForSingleValueEvent((new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.err.println(dataSnapshot);
+                if(dataSnapshot.getValue() != null) {
+                    String timest = ((Map<String, String>) dataSnapshot.getValue()).get("createdAt");
+                    us.setCreatedAt(timest);
+                }else {
+                    us.setCreatedAt(String.valueOf(new Date().getTime()));
+                }
+                createUser(us);
+            }
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        }));
     }
 
 
