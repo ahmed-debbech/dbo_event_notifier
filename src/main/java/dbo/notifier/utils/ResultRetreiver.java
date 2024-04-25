@@ -38,7 +38,6 @@ public class ResultRetreiver {
             }
             i--;
             if((ResultRetreiver.getInstance().getPids().containsKey(pid))) break;
-            System.err.println(i);
         }
         if(i <= 0) return null;
 

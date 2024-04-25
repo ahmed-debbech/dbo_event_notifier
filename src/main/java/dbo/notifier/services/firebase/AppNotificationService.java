@@ -53,13 +53,32 @@ public class AppNotificationService {
 
         out.log("about to send new notification-----------");
         List<String> userIds = usersManagement.getAllFcm();
-
+        String title = "";
+        String body = "";
+        switch (serviceType){
+            case SURP_BUDO:
+                title = "SURPRISE!";
+                body = "Surprise adult solo Budokai is starting now! hurry up!";
+                break;
+            case NEWS:
+                title = "You have a new update";
+                body = "We have a new update for you in the What's New section.";
+                break;
+            case WORLD_BOSS:
+                title = "World boss is 95%";
+                body = "Almost here, come and kill the World Boss.";
+                break;
+            case ADULT_SOLO_BUDO:
+                title = "A new adult solo Budokai";
+                body = "A new event is starting in 10 mins";
+                break;
+        }
         for(String ids : userIds){
             out.log("sending notification to " + ids);
             Message message = Message.builder()
                     .setNotification(Notification.builder()
-                            .setTitle(ids.substring(0,3))
-                            .setBody("bnbnbn")
+                            .setTitle(title)
+                            .setBody(title)
                             .build())
                     .setToken(ids)
                     .build();

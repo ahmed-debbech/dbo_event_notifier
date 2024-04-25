@@ -8,10 +8,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -37,8 +34,16 @@ public class TestController {
         database.addNewEvent("sss", String.valueOf(new Date().getTime()));
         return new ResponseEntity<>(true , HttpStatus.OK);
     }
-    @GetMapping("/notif")
-    public void notif(){
-        appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
+    @GetMapping("/notif/{type}")
+    public void notif(@PathVariable("type") int type){
+        if(type==0)
+            appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
+        if(type==1)
+            appNotificationService.sendNotif(ServiceType.SURP_BUDO);
+        if(type==2)
+            appNotificationService.sendNotif(ServiceType.WORLD_BOSS);
+        if(type==3)
+            appNotificationService.sendNotif(ServiceType.NEWS);
+
     }
 }
