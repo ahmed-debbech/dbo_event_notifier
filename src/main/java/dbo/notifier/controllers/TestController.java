@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 // the annotations below are disabled for not to be used in production
-@RestController
-@RequestMapping("/test")
+//@RestController
+//@RequestMapping("/test")
 public class TestController {
 
     @Autowired
