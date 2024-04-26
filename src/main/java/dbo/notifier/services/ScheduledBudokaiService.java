@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -102,9 +103,7 @@ public class ScheduledBudokaiService {
                 url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
                 System.err.println("NOTIFY");
                 restTemplate.getForEntity(url, String.class);
-                notifTime = notifTime.withMinute(0);
-                notifTime = notifTime.minusHours(notifTime.getHour()+1);
-                database.addNewEvent("[done]", notifTime.toString());
+                database.addNewEvent("[done]", String.valueOf(LocalDateTime.now().plusMinutes(10).toEpochSecond(ZoneOffset.UTC)));
                 appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
                 nextNotif = null;
                 this.eventIsDone = true;
