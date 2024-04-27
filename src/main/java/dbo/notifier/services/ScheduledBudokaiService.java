@@ -103,7 +103,7 @@ public class ScheduledBudokaiService {
                 url += URLEncoder.encode("A new Budokai - Adult Solo event is about to start in 10 mins.", StandardCharsets.UTF_8.toString());
                 System.err.println("NOTIFY");
                 restTemplate.getForEntity(url, String.class);
-                database.addNewEvent("[done]", String.valueOf(LocalDateTime.now().plusMinutes(10).toEpochSecond(ZoneOffset.UTC)));
+                database.addNewEvent("[done]", String.valueOf(LocalDateTime.now().plusMinutes(10).toEpochSecond(ZoneOffset.UTC)) + "000");
                 appNotificationService.sendNotif(ServiceType.ADULT_SOLO_BUDO);
                 nextNotif = null;
                 this.eventIsDone = true;

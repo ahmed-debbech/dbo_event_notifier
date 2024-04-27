@@ -117,7 +117,7 @@ public class SurpriseBudokaiService {
         try {
             url += URLEncoder.encode("SURPRISE adult solo Budokai is starting NOW", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
-            database.addNewEvent("[surprise]", String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)));
+            database.addNewEvent("[surprise]", String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) + "000");
             appNotificationService.sendNotif(ServiceType.SURP_BUDO);
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");
