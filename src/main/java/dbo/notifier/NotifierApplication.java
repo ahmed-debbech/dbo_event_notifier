@@ -1,5 +1,6 @@
 package dbo.notifier;
 
+import dbo.notifier.services.IScrapper;
 import dbo.notifier.services.ScheduledBudokaiService;
 import dbo.notifier.services.SurpriseBudokaiService;
 import dbo.notifier.services.WorldBossService;
@@ -26,9 +27,14 @@ public class NotifierApplication {
 
 	@Autowired
 	private AppNotificationService appNotifierService;
+
+	@Autowired
+	private IScrapper scrapper;
+
 	@PostConstruct
 	private void postConstruct() {
 		appNotifierService.init();
+		scrapper.launch();
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(NotifierApplication.class, args);
@@ -36,16 +42,16 @@ public class NotifierApplication {
 
 	@Scheduled(cron = "*/1 * * * * *") //every seconds
 	public void checkScheduledBudoHasArrived() {
-		scheduledBudokaiService.notifyUsers();
+		//scheduledBudokaiService.notifyUsers();
 	}
 
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
 	public void scheduleWorldBoss() {
-		worldBossService.check();
+		//worldBossService.check();
 	}
 
 	@Scheduled(cron = "0 * * * * *") //every minute
 	public void scheduleSurpriseBudokai() {
-		budokaiService.check();
+		//budokaiService.check();
 	}
 }

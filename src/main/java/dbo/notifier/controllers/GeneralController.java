@@ -58,15 +58,4 @@ public class GeneralController {
         List<String> boss = worldBossService.getAllBoss();
         return new ResponseEntity<>(boss ,HttpStatus.OK);
     }
-    @PostMapping("/news")
-    public ResponseEntity<Boolean> n(@RequestBody NewsMessage newsMessage){
-        boolean b = databaseApi.addNews(newsMessage);
-        return new ResponseEntity<>(b ,HttpStatus.OK);
-    }
-    @GetMapping("/news")
-    public ResponseEntity<List<NewsMessage>> m(){
-        int pid = databaseApi.getNews();
-        List<NewsMessage> ff = (List<NewsMessage>)ResultRetreiver.getInstance().waitFor(pid);
-        return new ResponseEntity<>(ff ,HttpStatus.OK);
-    }
 }

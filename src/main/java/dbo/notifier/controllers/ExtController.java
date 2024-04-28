@@ -1,5 +1,6 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.services.IScrapper;
 import dbo.notifier.services.ScheduledBudokaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class ExtController {
 
     @Autowired
-    private ScheduledBudokaiService scheduledBudokaiService;
+    private IScrapper scrapper;
 
     @CrossOrigin(origins = "*")
     @PostMapping("/html")
     public void html(@RequestBody String name) {
-        scheduledBudokaiService.resume(name);
+        scrapper.resume(name);
     }
 }
