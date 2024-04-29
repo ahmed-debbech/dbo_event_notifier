@@ -96,7 +96,9 @@ public class LiveEvents implements ILiveEvents {
         this.listOfEvents = curr;
         if(ev != apiReturnedValue) {
             //TODO notify users about live events
+            for(int i=0; i<=this.listOfEvents.length-1; i++){
 
+            }
         }
         apiReturnedValue = ev;
     }
