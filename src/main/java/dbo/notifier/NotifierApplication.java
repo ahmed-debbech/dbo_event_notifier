@@ -1,10 +1,8 @@
 package dbo.notifier;
 
-import dbo.notifier.services.IScrapper;
-import dbo.notifier.services.ScheduledBudokaiService;
-import dbo.notifier.services.SurpriseBudokaiService;
-import dbo.notifier.services.WorldBossService;
+import dbo.notifier.services.*;
 import dbo.notifier.services.firebase.AppNotificationService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,19 +15,16 @@ import javax.annotation.PostConstruct;
 public class NotifierApplication {
 
 	@Autowired
-	private ScheduledBudokaiService scheduledBudokaiService;
-
-	@Autowired
-	private WorldBossService worldBossService;
-
-	@Autowired
-	private SurpriseBudokaiService budokaiService;
+	private ILiveEvents liveEvents;
 
 	@Autowired
 	private AppNotificationService appNotifierService;
 
 	@Autowired
 	private IScrapper scrapper;
+
+	@Autowired
+	private WorldBossService worldBossService;
 
 	@PostConstruct
 	private void postConstruct() {
@@ -47,11 +42,11 @@ public class NotifierApplication {
 
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
 	public void scheduleWorldBoss() {
-		//worldBossService.check();
+		worldBossService.check();
 	}
 
 	@Scheduled(cron = "0 * * * * *") //every minute
 	public void scheduleSurpriseBudokai() {
-		//budokaiService.check();
+		liveEvents.check();
 	}
 }

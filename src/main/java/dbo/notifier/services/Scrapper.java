@@ -32,7 +32,7 @@ public class Scrapper implements IScrapper{
 
 
     @Override
-    public Date getClosestDate(ScheduledEventNames eventname) {
+    public Date getClosestDate(ScheduledEventNames eventname) throws Exception{
         Date closest = null;
 
         switch (eventname){
@@ -55,6 +55,7 @@ public class Scrapper implements IScrapper{
                 closest = least(dojo_war);
                 break;
         }
+        if(closest == null) throw new Exception("null date");
         return closest;
     }
 
@@ -85,6 +86,11 @@ public class Scrapper implements IScrapper{
 
     private Date least(List<Event> events){
         out.log("Getting the closest next event...");
+        if(events == null || events.isEmpty()){
+            out.log("empty events.. nothing parsed");
+            return null;
+        }
+
         List<Date> d = TimeUtils.getByCountdown(events);
         d = TimeUtils.getBySchedule(d,events);
         //System.err.println(d);
@@ -216,12 +222,18 @@ public class Scrapper implements IScrapper{
         for(Element tr : trs){
             if(!head) {
                 Elements tds = tr.children();
-                Event ev = new Event(
-                        "db_scramble",
-                        tds.get(0).text(),
-                        tds.get(1).text().split("-", 2)[0].trim(),
-                        tds.get(2).text());
-                db_scramble.add(ev);
+                Event ev;
+                if(tds.get(2).text().startsWith("Cur"))
+                    ev = null;
+                else
+                    ev = new Event(
+                            "db_scramble",
+                            tds.get(0).text(),
+                            tds.get(1).text().split("-", 2)[0].trim(),
+                            tds.get(2).text());
+
+                if(ev != null)
+                    db_scramble.add(ev);
             }
             head = false;
         }

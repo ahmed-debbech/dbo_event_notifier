@@ -1,12 +1,10 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogLiveEvents;
-import dbo.notifier.services.firebase.AppNotificationService;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
-public class SurpriseBudokaiService {
+public class LiveEvents implements ILiveEvents {
 
     private LogLiveEvents out = new LogLiveEvents();
-    @Autowired
-    private IDatabaseApi database;
-    @Autowired
-    private AppNotificationService appNotificationService;
+
 
     private int apiReturnedValue = 0;
 
@@ -44,6 +37,18 @@ public class SurpriseBudokaiService {
     String urlTelegram;
 
     Map<String, Integer> eventNumber;
+
+    int[] listOfEvents;
+
+    @Override
+    public List<Integer> getList() {
+        List<Integer> list = new ArrayList<>();
+        if(this.listOfEvents == null) return null;
+        for(int i=0; i<=this.listOfEvents.length-1; i++)
+            list.add(this.listOfEvents[i]);
+        return list;
+    }
+
 
     private void prepareDict(){
         this.eventNumber = new HashMap<>();
@@ -71,58 +76,19 @@ public class SurpriseBudokaiService {
         eventNumber.put("EVENT_APRIL_FOOL", 4194304);
     }
 
-    private int[] getFromBinary(int ev){
-        String binary = Integer.toBinaryString(ev);
-        int iter = 1;
-        binary = new StringBuilder().append(binary).reverse().toString();
-        int [] currEvents = new int[this.eventNumber.size()];
-        int h = 1;
-        for(int i=0; i<=binary.length()-1; i++){
-            if(binary.charAt(i) == '1'){
-                out.log("event running: " + iter);
-                currEvents[h] = iter;
-                h++;
-            }
-            iter = iter * 2;
-        }
-        currEvents[0] = h;
-        return currEvents;
-    }
-
-    private boolean checkerIfLive(int []ev, String event_name){
-        for(int i=1; i<=ev[0]-1; i++){
-            if(this.eventNumber.get(event_name).equals(ev[i])){
-                return true;
-            }
-        }
-        return false;
-    }
     public void check(){
-        out.log("checking surprise budo progress at: " + LocalDateTime.now());
+        out.log("checking all current events at: " + LocalDateTime.now());
         prepareDict();
         int ev = getCurrentEvents();
         int [] curr = getFromBinary(ev);
-        if(checkerIfLive(curr, "EVENT_BUDO_ADULT_SOLO")){
-            if(ev != apiReturnedValue) {
-                notifyUsers();
-            }
+        this.listOfEvents = curr;
+        if(ev != apiReturnedValue) {
+            //TODO notify users about live events
+            //notifyUsers();
         }
         apiReturnedValue = ev;
     }
 
-    private void notifyUsers(){
-        out.log("Notifying users: budokai solo starting now");
-        RestTemplate restTemplate = new RestTemplate();
-        String url = urlTelegram;
-        try {
-            url += URLEncoder.encode("SURPRISE adult solo Budokai is starting NOW", StandardCharsets.UTF_8.toString());
-            restTemplate.getForEntity(url, String.class);
-            database.addNewEvent("[surprise]", String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) + "000");
-            appNotificationService.sendNotif(ServiceType.SURP_BUDO);
-        } catch (UnsupportedEncodingException e) {
-            out.log("could not access telegram to notify for world boss");
-        }
-    }
     private int getCurrentEvents(){
         out.log("retreiving api of current events : " + LocalDateTime.now());
 
@@ -153,4 +119,29 @@ public class SurpriseBudokaiService {
         out.log("done retreiving at " + LocalDateTime.now());
         return d;
     }
+
+    /**
+     * extracts current events from (int) number from api
+     * and creates array mapping multiple two of current events
+     * @param ev number of all events to be represtened in binary
+     * @return int[] like [2,4,128,256] => the current live events to be mapped
+     */
+    private int[] getFromBinary(int ev){
+        String binary = Integer.toBinaryString(ev);
+        int iter = 1;
+        binary = new StringBuilder().append(binary).reverse().toString();
+        int [] currEvents = new int[this.eventNumber.size()];
+        int h = 1;
+        for(int i=0; i<=binary.length()-1; i++){
+            if(binary.charAt(i) == '1'){
+                out.log("event running: " + iter);
+                currEvents[h] = iter;
+                h++;
+            }
+            iter = iter * 2;
+        }
+        currEvents[0] = h;
+        return currEvents;
+    }
+
 }

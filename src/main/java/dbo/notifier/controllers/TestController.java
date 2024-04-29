@@ -15,7 +15,7 @@ public class TestController {
     private IScrapper scrapper;
 
     @PostMapping("/state")
-    public void state(@RequestBody String html) {
+    public void state(@RequestBody String html) throws Exception {
         scrapper.resume(html);
         System.err.println(scrapper.getClosestDate(ScheduledEventNames.ADULT_SOLO_BUDOKAI));
         System.err.println(scrapper.getClosestDate(ScheduledEventNames.ADULT_PARTY_BUDOKAI));

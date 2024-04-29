@@ -3,7 +3,6 @@ package dbo.notifier.services.firebase;
 import com.google.firebase.database.*;
 import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.logger.FBLogger;
-import dbo.notifier.logger.LogSurprise;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.User;
 import dbo.notifier.services.IDatabaseApi;

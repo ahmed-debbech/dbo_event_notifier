@@ -1,5 +1,6 @@
 package dbo.notifier.services;
 
+import dbo.notifier.dto.BossProgress;
 import dbo.notifier.logger.LogWorldBoss;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.services.firebase.AppNotificationService;
@@ -44,10 +45,13 @@ public class WorldBossService {
     private IDatabaseApi database;
     @Autowired
     private AppNotificationService appNotificationService;
+    public double percentageProgress = -1;
 
     public void check(){
         out.log("checking world boss progress at: " + LocalDateTime.now());
         double percentage = getPercentageValue();
+        this.percentageProgress = percentage;
+
         if(is100(percentage)) {
             if(!isNotified) {
                 notifyUsers();
@@ -112,5 +116,12 @@ public class WorldBossService {
     public List<String> getAllBoss(){
         int pid = database.allBoss();
         return (List<String>) ResultRetreiver.getInstance().waitFor(pid);
+    }
+
+    public BossProgress getProgress() {
+        BossProgress bp = new BossProgress();
+        bp.setPercentage(String.valueOf(this.percentageProgress));
+        bp.setEta(null);
+        return bp;
     }
 }

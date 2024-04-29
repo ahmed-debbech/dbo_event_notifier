@@ -1,10 +1,12 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.dto.BossProgress;
 import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.dto.NextEventDto;
 import dbo.notifier.dto.ScheduledEvents;
 import dbo.notifier.services.IDatabaseApi;
 import dbo.notifier.services.IEventsService;
+import dbo.notifier.services.WorldBossService;
 import dbo.notifier.utils.ResultRetreiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,9 @@ public class AppController {
     @Autowired
     private IEventsService eventsService;
 
+    @Autowired
+    private WorldBossService worldBossService;
+
     @GetMapping("/state")
     public ResponseEntity<ScheduledEvents> next(){
 
@@ -31,6 +36,12 @@ public class AppController {
         return new ResponseEntity<>(sc ,HttpStatus.OK);
     }
 
+    @GetMapping("/boss")
+    public ResponseEntity<BossProgress> boss(){
+
+        BossProgress sc = worldBossService.getProgress();
+        return new ResponseEntity<>(sc ,HttpStatus.OK);
+    }
 
     @PostMapping("/news")
     public ResponseEntity<Boolean> n(@RequestBody NewsMessage newsMessage){
