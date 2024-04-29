@@ -1,4 +1,8 @@
-log*
+log
+log_surp
+log_sched
+log_sched
+log_scrap
 target
 .idea
 src/main/resources/application.properties
