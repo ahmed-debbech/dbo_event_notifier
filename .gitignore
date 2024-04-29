@@ -1,9 +1,8 @@
 log
-log_surp
-log_sched
 log_world
 log_scrap
 log_live
+log_firebase
 target
 .idea
 src/main/resources/application.properties

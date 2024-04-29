@@ -1,0 +1,60 @@
+
+[ 2024-04-25T10:20:44.001732646 ]    => Launching chrome... (connectiong to dboglobal.to)
+[ 2024-04-25T10:20:47.814220447 ]    => Checking server for updates
+[ 2024-04-25T10:20:47.814269076 ]    => Parsing html ...
+[ 2024-04-25T10:20:47.846664824 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='3 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='5 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='6 days'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='7 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='9 hours'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='2 days'}]
+[ 2024-04-25T10:20:47.846716495 ]    => Finish mapping and parsing html.
+[ 2024-04-25T10:20:47.846760036 ]    => Getting the closest next event...
+[ 2024-04-25T10:20:47.847230435 ]    => Next event will be: Thu Apr 25 18:00:00 CET 2024
+[ 2024-04-25T10:20:47.847301207 ]    => Next event reminder will be: Thu Apr 25 17:50:00 CET 2024
+[ 2024-04-25T10:20:47.847348539 ]    => Finish getting the closest event
+[ 2024-04-25T10:20:47.847669219 ]    => finish checking server
+[ 2024-04-25T10:49:26.003100594 ]    => Launching chrome... (connectiong to dboglobal.to)
+[ 2024-04-25T10:49:26.607827147 ]    => Checking server for updates
+[ 2024-04-25T10:49:26.607879369 ]    => Parsing html ...
+[ 2024-04-25T10:49:26.636780932 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='3 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='5 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='6 days'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='7 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='8 hours'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='2 days'}]
+[ 2024-04-25T10:49:26.636860045 ]    => Finish mapping and parsing html.
+[ 2024-04-25T10:49:26.636915709 ]    => Getting the closest next event...
+[ 2024-04-25T10:49:26.637480404 ]    => Next event will be: Thu Apr 25 18:00:00 CET 2024
+[ 2024-04-25T10:49:26.637566810 ]    => Next event reminder will be: Thu Apr 25 17:50:00 CET 2024
+[ 2024-04-25T10:49:26.637618669 ]    => Finish getting the closest event
+[ 2024-04-25T10:49:26.637673582 ]    => finish checking server
+[ 2024-04-25T10:50:23.002995602 ]    => Launching chrome... (connectiong to dboglobal.to)
+[ 2024-04-25T10:50:23.719720977 ]    => Checking server for updates
+[ 2024-04-25T10:50:23.719779735 ]    => Parsing html ...
+[ 2024-04-25T10:50:23.758720043 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='3 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='5 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='6 days'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='7 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='8 hours'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='2 days'}]
+[ 2024-04-25T10:50:23.758788910 ]    => Finish mapping and parsing html.
+[ 2024-04-25T10:50:23.758851616 ]    => Getting the closest next event...
+[ 2024-04-25T10:50:23.759464085 ]    => Next event will be: Thu Apr 25 18:00:00 CET 2024
+[ 2024-04-25T10:50:23.759557212 ]    => Next event reminder will be: Thu Apr 25 17:50:00 CET 2024
+[ 2024-04-25T10:50:23.759610985 ]    => Finish getting the closest event
+[ 2024-04-25T10:50:23.759691596 ]    => finish checking server
+[ 2024-04-25T10:50:26.723042737 ]    => Checking server for updates
+[ 2024-04-25T10:50:26.723102590 ]    => Parsing html ...
+[ 2024-04-25T10:50:26.725244479 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='3 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='5 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='6 days'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='7 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='8 hours'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='2 days'}]
+[ 2024-04-25T10:50:26.725308402 ]    => Finish mapping and parsing html.
+[ 2024-04-25T10:50:26.725354502 ]    => Getting the closest next event...
+[ 2024-04-25T10:50:26.725712334 ]    => Next event will be: Thu Apr 25 18:00:00 CET 2024
+[ 2024-04-25T10:50:26.725781082 ]    => Next event reminder will be: Thu Apr 25 17:50:00 CET 2024
+[ 2024-04-25T10:50:26.725828933 ]    => Finish getting the closest event
+[ 2024-04-25T10:50:26.725874049 ]    => finish checking server
+[ 2024-04-29T10:03:15.002086811 ]    => Launching chrome... (connectiong to dboglobal.to)
+[ 2024-04-29T10:03:29.194046273 ]    => Checking server for updates
+[ 2024-04-29T10:03:29.194097488 ]    => Parsing html ...
+[ 2024-04-29T10:03:29.222872266 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='6 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='1 day'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='2 days'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='3 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='3 days'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='5 days'}]
+[ 2024-04-29T10:03:29.222925914 ]    => Finish mapping and parsing html.
+[ 2024-04-29T10:03:29.222968865 ]    => Getting the closest next event...
+[ 2024-04-29T10:03:29.223416639 ]    => Next event will be: Tue Apr 30 10:00:00 CET 2024
+[ 2024-04-29T10:03:29.223489070 ]    => Next event reminder will be: Tue Apr 30 09:50:00 CET 2024
+[ 2024-04-29T10:03:29.223536834 ]    => Finish getting the closest event
+[ 2024-04-29T10:03:29.223586345 ]    => finish checking server
+[ 2024-04-29T11:07:15.002537369 ]    => Launching chrome... (connectiong to dboglobal.to)
+[ 2024-04-29T11:07:15.472982253 ]    => Checking server for updates
+[ 2024-04-29T11:07:15.473072343 ]    => Parsing html ...
+[ 2024-04-29T11:07:15.541710313 ]    => [Event{name='Adult - Solo', day='Sunday', schedule='6am', countdown='6 days'}, Event{name='Adult - Solo', day='Tuesday', schedule='10am', countdown='24 hours'}, Event{name='Adult - Solo', day='Tuesday', schedule='10pm', countdown='1 day'}, Event{name='Adult - Solo', day='Thursday', schedule='2am', countdown='3 days'}, Event{name='Adult - Solo', day='Thursday', schedule='6pm', countdown='3 days'}, Event{name='Adult - Solo', day='Saturday', schedule='2pm', countdown='5 days'}]
+[ 2024-04-29T11:07:15.541798140 ]    => Finish mapping and parsing html.
+[ 2024-04-29T11:07:15.541871456 ]    => Getting the closest next event...
+[ 2024-04-29T11:07:15.542558791 ]    => Next event will be: Tue Apr 30 10:00:00 CET 2024
+[ 2024-04-29T11:07:15.542677237 ]    => Next event reminder will be: Tue Apr 30 09:50:00 CET 2024
+[ 2024-04-29T11:07:15.542751505 ]    => Finish getting the closest event
+[ 2024-04-29T11:07:15.542846720 ]    => finish checking server
