@@ -3,6 +3,7 @@ log_surp
 log_sched
 log_world
 log_scrap
+log_live
 target
 .idea
 src/main/resources/application.properties
