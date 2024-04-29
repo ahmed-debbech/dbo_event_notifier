@@ -2,8 +2,7 @@ package dbo.notifier.services;
 
 public enum ServiceType {
 
-    SURP_BUDO,
-    ADULT_SOLO_BUDO,
+    EVENT,
     WORLD_BOSS,
     NEWS
 }

@@ -1,4 +1,4 @@
-package dbo.notifier.services;
+package dbo.notifier.services.firebase;
 
 import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.model.User;

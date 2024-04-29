@@ -2,9 +2,8 @@ package dbo.notifier.controllers;
 
 import dbo.notifier.dto.BossProgress;
 import dbo.notifier.dto.NewsMessage;
-import dbo.notifier.dto.NextEventDto;
 import dbo.notifier.dto.ScheduledEvents;
-import dbo.notifier.services.IDatabaseApi;
+import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.services.IEventsService;
 import dbo.notifier.services.WorldBossService;
 import dbo.notifier.utils.ResultRetreiver;

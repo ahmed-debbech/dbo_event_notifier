@@ -1,5 +1,6 @@
 package dbo.notifier.services;
 
+import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

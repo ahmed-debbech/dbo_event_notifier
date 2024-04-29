@@ -5,7 +5,6 @@ import dbo.notifier.dto.NewsMessage;
 import dbo.notifier.logger.FBLogger;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.User;
-import dbo.notifier.services.IDatabaseApi;
 import dbo.notifier.utils.FirebaseEventsConverter;
 import dbo.notifier.utils.ResultRetreiver;
 import dbo.notifier.utils.UUIDGen;
@@ -71,7 +70,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
     public void addNewWorldBoss(String time) {
         out.log("a new world boss is being added");
         String uuid = UUIDGen.generate();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v0.9/boss/"+uuid);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v09/boss/"+uuid);
         Map<String, String> map = new HashMap<>();
         map.put("time", time);
         ref.setValueAsync(map);
@@ -83,7 +82,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("/v0.9/boss");
+        DatabaseReference ref = database.getReference("/v09/boss");
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -109,7 +108,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
     public boolean addNews(NewsMessage newsMessage) {
         out.log("adding new News Message");
         try {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v0.9/news/" + UUIDGen.generate());
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v09/news/" + UUIDGen.generate());
             newsMessage.setTime(String.valueOf(new Date().getTime()));
             ref.setValueAsync(newsMessage);
         }catch (Exception e){
@@ -124,7 +123,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("/v0.9/news");
+        DatabaseReference ref = database.getReference("/v09/news");
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -147,7 +146,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         out.log("getting all fcm tokens");
         int n = UUIDGen.fourNumbers();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("/v0.9/users");
+        DatabaseReference ref = database.getReference("/v09/users");
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -168,7 +167,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         us.setFcmToken(fcmToken);
         us.setLastOpening(String.valueOf(new Date().getTime()));
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("/v0.9/users/" + fcmToken);
+        DatabaseReference ref = database.getReference("/v09/users/" + fcmToken);
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -2,8 +2,8 @@ package dbo.notifier.services;
 
 import dbo.notifier.dto.BossProgress;
 import dbo.notifier.logger.LogWorldBoss;
-import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.services.firebase.AppNotificationService;
+import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;

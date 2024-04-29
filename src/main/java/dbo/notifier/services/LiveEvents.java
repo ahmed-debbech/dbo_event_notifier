@@ -1,10 +1,13 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogLiveEvents;
+import dbo.notifier.services.firebase.AppNotificationService;
+import dbo.notifier.services.firebase.IDatabaseApi;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +44,11 @@ public class LiveEvents implements ILiveEvents {
     String urlTelegram;
 
     Map<String, Integer> eventNumber;
+
+    @Autowired
+    private IDatabaseApi database;
+    @Autowired
+    private AppNotificationService appNotificationService;
 
     int[] listOfEvents;
 
@@ -84,11 +96,23 @@ public class LiveEvents implements ILiveEvents {
         this.listOfEvents = curr;
         if(ev != apiReturnedValue) {
             //TODO notify users about live events
-            //notifyUsers();
+
         }
         apiReturnedValue = ev;
     }
-
+    private void notifyUsers(EventType event){
+        out.log("Notifying users: FOR EVENT: " + event.name());
+        RestTemplate restTemplate = new RestTemplate();
+        String url = urlTelegram;
+        try {
+            url += URLEncoder.encode(event.name() + " event is starting now!", StandardCharsets.UTF_8.toString());
+            restTemplate.getForEntity(url, String.class);
+            database.addNewEvent(event.name(), String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) + "000");
+            appNotificationService.sendNotif(ServiceType.EVENT, event);
+        } catch (UnsupportedEncodingException e) {
+            out.log("could not access telegram to notify for world boss");
+        }
+    }
     private int getCurrentEvents(){
         out.log("retreiving api of current events : " + LocalDateTime.now());
 
