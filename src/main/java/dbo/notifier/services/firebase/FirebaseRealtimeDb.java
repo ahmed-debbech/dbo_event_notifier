@@ -20,14 +20,14 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     @Override
     public void createUser(User user) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v0.9/users/"+user.getFcmToken());
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v09/users/"+user.getFcmToken());
 
         ref.setValueAsync(user);
     }
 
     @Override
     public void updateUser(User user) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v0.9/users/"+user.getFcmToken()+"/lastOpening");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v09/users/"+user.getFcmToken()+"/lastOpening");
 
         ref.setValueAsync(user.getLastOpening());
     }
@@ -35,7 +35,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
     @Override
     public void addNewEvent(String eventName, String time) {
         out.log("a new event is being added");
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v0.9/events/"+ UUIDGen.generate());
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/v09/events/"+ UUIDGen.generate());
         Map<String, String> map = new HashMap<>();
         map.put("name", eventName);
         map.put("time", time);
@@ -48,7 +48,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
         int n = UUIDGen.fourNumbers();
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("/v0.9/events");
+        DatabaseReference ref = database.getReference("/v09/events");
         ref.addListenerForSingleValueEvent((new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

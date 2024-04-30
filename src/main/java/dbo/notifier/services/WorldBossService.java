@@ -30,7 +30,7 @@ public class WorldBossService {
 
     private LogWorldBoss out = new LogWorldBoss();
 
-    private boolean isNotified;
+    private boolean isNotified =false;
 
     @Value("${trust-store}")
     private Resource trustStore;
@@ -71,7 +71,7 @@ public class WorldBossService {
             restTemplate.getForEntity(url, String.class);
             database.addNewWorldBoss(String.valueOf(new Date().getTime()));
             appNotificationService.sendNotif(ServiceType.WORLD_BOSS);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             out.log("could not access telegram to notify for world boss");
         }
     }

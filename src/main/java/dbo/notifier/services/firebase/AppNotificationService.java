@@ -103,6 +103,8 @@ public class AppNotificationService {
         String title = eventType.name() + " event is starting now!";
         String body = "Join the game now to play.";
 
+        if(userIds == null || userIds.isEmpty()) return;
+
         for(String ids : userIds){
             out.log("sending notification to " + ids);
             Message message = Message.builder()

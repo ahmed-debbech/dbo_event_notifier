@@ -32,7 +32,7 @@ public class LiveEvents implements ILiveEvents {
     private LogLiveEvents out = new LogLiveEvents();
 
 
-    private int apiReturnedValue = 0;
+    public int apiReturnedValue = 0;
 
     @Value("${trust-store}")
     private Resource trustStore;
@@ -50,14 +50,15 @@ public class LiveEvents implements ILiveEvents {
     @Autowired
     private AppNotificationService appNotificationService;
 
-    int[] listOfEvents;
+    public int[] listOfNewEvents = new int[21];
+    public int[] listOfOldEvents = new int[21];
 
     @Override
     public List<Integer> getList() {
         List<Integer> list = new ArrayList<>();
-        if(this.listOfEvents == null) return null;
-        for(int i=0; i<=this.listOfEvents.length-1; i++)
-            list.add(this.listOfEvents[i]);
+        if(this.listOfNewEvents == null) return null;
+        for(int i = 0; i<=this.listOfNewEvents.length-1; i++)
+            list.add(this.listOfNewEvents[i]);
         return list;
     }
 
@@ -86,22 +87,61 @@ public class LiveEvents implements ILiveEvents {
         eventNumber.put("EVENT_CHRISTMAS", 1048576);
         eventNumber.put("EVENT_HALLOWEEN", 2097152);
         eventNumber.put("EVENT_APRIL_FOOL", 4194304);
+
     }
 
     public void check(){
         out.log("checking all current events at: " + LocalDateTime.now());
+        System.err.println(apiReturnedValue);
         prepareDict();
         int ev = getCurrentEvents();
-        int [] curr = getFromBinary(ev);
-        this.listOfEvents = curr;
-        if(ev != apiReturnedValue) {
-            //TODO notify users about live events
-            for(int i=0; i<=this.listOfEvents.length-1; i++){
 
+        this.listOfOldEvents = this.listOfNewEvents;
+        this.listOfNewEvents = getFromBinary(ev);
+
+        if((ev != apiReturnedValue) && (apiReturnedValue != 0)) {
+            for(int i = 0; i<=this.listOfNewEvents.length-1; i++){
+                List<Integer> p = searchForNewEvents();
+                if(!p.isEmpty()){
+                    for(int j=0; j<=p.size()-1; j++) {
+                        switch (p.get(j)) {
+                            case 2:
+                                notifyUsers(EventType.DB_SCRAMBLE);
+                                break;
+                            case 4:
+                                notifyUsers(EventType.DOJO_WAR);
+                                break;
+                            case 8:
+                                notifyUsers(EventType.BUDO_KID_SOLO);
+                                break;
+                            case 16:
+                                notifyUsers(EventType.BUDO_KID_TEAM);
+                                break;
+                            case 32:
+                                notifyUsers(EventType.BUDO_ADULT_SOLO);
+                                break;
+                            case 64:
+                                notifyUsers(EventType.BUDO_ADULT_TEAM);
+                                break;
+                        }
+                    }
+                }
             }
         }
         apiReturnedValue = ev;
     }
+    private List<Integer> searchForNewEvents(){
+        List<Integer> li = new ArrayList<>();
+        for(int i = 0; i<=this.listOfNewEvents.length-1; i++){
+            if(this.listOfOldEvents[i] != this.listOfNewEvents[i] ) {
+                if (this.listOfNewEvents[i] < 128 && this.listOfNewEvents[i] > 0) {
+                    li.add(this.listOfNewEvents[i]);
+                }
+            }
+        }
+        return li;
+    }
+
     private void notifyUsers(EventType event){
         out.log("Notifying users: FOR EVENT: " + event.name());
         RestTemplate restTemplate = new RestTemplate();
@@ -162,11 +202,13 @@ public class LiveEvents implements ILiveEvents {
             if(binary.charAt(i) == '1'){
                 out.log("event running: " + iter);
                 currEvents[h] = iter;
-                h++;
+            }else{
+                currEvents[h] = 0;
             }
             iter = iter * 2;
+            h++;
         }
-        currEvents[0] = h;
+        currEvents[0] = 0;
         return currEvents;
     }
 

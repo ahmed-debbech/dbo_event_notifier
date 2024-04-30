@@ -35,11 +35,6 @@ public class NotifierApplication {
 		SpringApplication.run(NotifierApplication.class, args);
 	}
 
-	@Scheduled(cron = "*/1 * * * * *") //every seconds
-	public void checkScheduledBudoHasArrived() {
-		//scheduledBudokaiService.notifyUsers();
-	}
-
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
 	public void scheduleWorldBoss() {
 		worldBossService.check();
