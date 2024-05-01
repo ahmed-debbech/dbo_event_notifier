@@ -1,6 +1,5 @@
 package dbo.notifier.services;
 
-import dbo.notifier.dto.ScheduledEvents;
 import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.utils.TimeUtils;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class EventsService implements IEventsService {
+public class ScheduledEvents implements IScheduledEvents {
 
     @Autowired
     private IScrapper scrapper;
@@ -22,8 +21,8 @@ public class EventsService implements IEventsService {
     private Map<ScheduledEventNames, String> lastDate = new HashMap<>();
 
     @Override
-    public ScheduledEvents getState() {
-        ScheduledEvents scheduledEvents = new ScheduledEvents();
+    public dbo.notifier.dto.ScheduledEvents getState() {
+        dbo.notifier.dto.ScheduledEvents scheduledEvents = new dbo.notifier.dto.ScheduledEvents();
         if(liveEvents.getList() == null){
             scheduledEvents.setCurrent_events(null);
         }else {

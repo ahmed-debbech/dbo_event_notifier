@@ -2,7 +2,6 @@ package dbo.notifier;
 
 import dbo.notifier.services.*;
 import dbo.notifier.services.firebase.AppNotificationService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +23,7 @@ public class NotifierApplication {
 	private IScrapper scrapper;
 
 	@Autowired
-	private IEventsService eventsService;
+	private IScheduledEvents eventsService;
 
 	@Autowired
 	private WorldBossService worldBossService;
