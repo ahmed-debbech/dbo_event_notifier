@@ -1,4 +1,4 @@
-package dbo.notifier.model;
+package dbo.notifier.services.enumeration;
 
 public enum ScheduledEventNames {
     ADULT_SOLO_BUDOKAI,

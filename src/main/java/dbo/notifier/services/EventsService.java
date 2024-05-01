@@ -1,7 +1,8 @@
 package dbo.notifier.services;
 
 import dbo.notifier.dto.ScheduledEvents;
-import dbo.notifier.model.ScheduledEventNames;
+import dbo.notifier.services.enumeration.ScheduledEventNames;
+import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

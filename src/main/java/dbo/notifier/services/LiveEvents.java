@@ -1,6 +1,8 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogLiveEvents;
+import dbo.notifier.services.enumeration.EventType;
+import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.firebase.AppNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import org.apache.http.client.HttpClient;

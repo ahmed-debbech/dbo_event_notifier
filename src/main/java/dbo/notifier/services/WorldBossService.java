@@ -2,6 +2,7 @@ package dbo.notifier.services;
 
 import dbo.notifier.dto.BossProgress;
 import dbo.notifier.logger.LogWorldBoss;
+import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.firebase.AppNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;

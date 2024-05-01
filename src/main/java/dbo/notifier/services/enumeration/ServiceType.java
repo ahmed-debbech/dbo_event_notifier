@@ -1,4 +1,4 @@
-package dbo.notifier.services;
+package dbo.notifier.services.enumeration;
 
 public enum ServiceType {
 

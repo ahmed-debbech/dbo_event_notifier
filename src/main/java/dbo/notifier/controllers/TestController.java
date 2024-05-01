@@ -1,13 +1,10 @@
 package dbo.notifier.controllers;
 
-import dbo.notifier.model.ScheduledEventNames;
-import dbo.notifier.services.ILiveEvents;
+import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.IScrapper;
 import dbo.notifier.services.LiveEvents;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 // the annotations below are disabled for not to be used in production

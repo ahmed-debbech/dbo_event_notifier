@@ -2,7 +2,7 @@ package dbo.notifier.services;
 
 import dbo.notifier.logger.LogScrapper;
 import dbo.notifier.model.Event;
-import dbo.notifier.model.ScheduledEventNames;
+import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.utils.SystemUtils;
 import dbo.notifier.utils.TimeUtils;
 import org.jsoup.Jsoup;
