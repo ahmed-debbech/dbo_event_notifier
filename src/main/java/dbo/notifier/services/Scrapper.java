@@ -37,7 +37,7 @@ public class Scrapper implements IScrapper{
 
         switch (eventname){
             case KID_SOLO_BUDOKAI:
-                closest = new Date(Long.parseLong("1714566242000"));//least(kid_solo_budo_events);
+                closest = least(kid_solo_budo_events);
                 break;
             case KID_PARTY_BUDOKAI:
                 closest = least(kid_party_budo_events);
