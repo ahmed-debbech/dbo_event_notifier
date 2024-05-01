@@ -24,6 +24,9 @@ public class NotifierApplication {
 	private IScrapper scrapper;
 
 	@Autowired
+	private IEventsService eventsService;
+
+	@Autowired
 	private WorldBossService worldBossService;
 
 	@PostConstruct
@@ -36,12 +39,17 @@ public class NotifierApplication {
 	}
 
 	@Scheduled(cron = "*/30 * * * * *") //every 30 secs
-	public void scheduleWorldBoss() {
+	public void checkingWorldBossProgress() {
 		worldBossService.check();
 	}
 
 	@Scheduled(cron = "0 * * * * *") //every minute
-	public void scheduleSurpriseBudokai() {
+	public void checkingLiveEvents() {
 		liveEvents.check();
+	}
+
+	@Scheduled(cron = "*/1 * * * * *") //every second
+	public void checkingScheduledEvents() {
+		eventsService.checkScheduledEvents();
 	}
 }

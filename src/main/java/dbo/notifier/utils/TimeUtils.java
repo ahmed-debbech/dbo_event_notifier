@@ -78,4 +78,9 @@ public class TimeUtils {
         }
         return d;
     }
+
+    public static String removeMillisecondsPart(String timestamp){
+        String str = timestamp.substring(0, timestamp.length() - 3);
+        return str;
+    }
 }

@@ -6,4 +6,6 @@ public interface ILiveEvents {
     List<Integer> getList();
 
     void check();
+
+    void notifyUsers(EventType event);
 }

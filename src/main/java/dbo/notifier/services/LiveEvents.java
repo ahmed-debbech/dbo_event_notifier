@@ -142,7 +142,7 @@ public class LiveEvents implements ILiveEvents {
         return li;
     }
 
-    private void notifyUsers(EventType event){
+    public void notifyUsers(EventType event){
         out.log("Notifying users: FOR EVENT: " + event.name());
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;
