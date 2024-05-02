@@ -42,7 +42,7 @@ public class LiveEvents implements ILiveEvents {
     @Value("${trust-store-password}")
     private String trustStorePassword;
 
-    @Value("${telegram.url}")
+    @Value("${telegram.url.test}")
     String urlTelegram;
 
     Map<String, Integer> eventNumber;

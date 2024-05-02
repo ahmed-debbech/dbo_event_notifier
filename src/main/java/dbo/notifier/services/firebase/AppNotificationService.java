@@ -94,6 +94,7 @@ public class AppNotificationService {
     }
 
     public void sendNotif(ServiceType serviceType, EventType eventType){
+        //TODO notification check before sending
 
         if(!serviceType.name().equals(ServiceType.EVENT.name())) return;
 

@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 @EnableScheduling
 @SpringBootApplication
 public class NotifierApplication {
@@ -30,6 +32,7 @@ public class NotifierApplication {
 
 	@PostConstruct
 	private void postConstruct() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		appNotifierService.init();
 		scrapper.launch();
 	}
