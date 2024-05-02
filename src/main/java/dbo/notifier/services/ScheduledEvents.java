@@ -120,7 +120,11 @@ public class ScheduledEvents implements IScheduledEvents {
                     if (!lastDate.get(ScheduledEventNames.DB_SCRAMBLE).equals(TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime()))))
                         liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
                 }else{
-                    liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
+                    try {
+                        liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
+                    }catch(Exception e){
+                        System.err.println("not");
+                    }
                 }
                 lastDate.put(ScheduledEventNames.DB_SCRAMBLE, TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime())));
             }
