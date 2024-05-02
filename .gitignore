@@ -3,6 +3,7 @@ log_world
 log_scrap
 log_live
 log_firebase
+log_sched
 target
 .idea
 src/main/resources/application.properties

@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import dbo.notifier.logger.FBLogger;
+import dbo.notifier.model.User;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.UsersManagement;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class AppNotificationService {
+public class FirebaseNotificationService {
 
     private FBLogger out = new FBLogger();
 
@@ -90,7 +91,7 @@ public class AppNotificationService {
             }
         }
         out.log("done sending to all notifications");
-        System.out.println("Successfully sent messages" );
+        System.out.println("Done sending messages" );
     }
 
     public void sendNotif(ServiceType serviceType, EventType eventType){
@@ -99,20 +100,24 @@ public class AppNotificationService {
         if(!serviceType.name().equals(ServiceType.EVENT.name())) return;
 
         out.log("about to send new notification for event " +eventType.name()+ " -----------");
-        List<String> userIds = usersManagement.getAllFcm();
+        List<User> userIds = usersManagement.getAllUsers();
         String title = eventType.name() + " event is starting now!";
         String body = "Join the game now to play.";
 
         if(userIds == null || userIds.isEmpty()) return;
 
-        for(String ids : userIds){
+        for(User ids : userIds){
             out.log("sending notification to " + ids);
+            if(!usersManagement.notifyFor(eventType, ids.getNotif_config())){
+                out.log("user [["+ids.getFcmToken()+"]] is not interested in being notified");
+                continue;
+            }
             Message message = Message.builder()
                     .setNotification(Notification.builder()
                             .setTitle(title)
                             .setBody(body)
                             .build())
-                    .setToken(ids)
+                    .setToken(ids.getFcmToken())
                     .build();
 
             String response;

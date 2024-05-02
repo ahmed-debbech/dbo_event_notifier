@@ -1,21 +1,29 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.services.IUsersManagement;
+import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.IScrapper;
 import dbo.notifier.services.LiveEvents;
+import dbo.notifier.services.enumeration.ServiceType;
+import dbo.notifier.services.firebase.FirebaseNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 // the annotations below are disabled for not to be used in production
-//@RestController
-//@RequestMapping("/test")
+@RestController
+@RequestMapping("/test")
 public class TestController {
 
     @Autowired
     private IScrapper scrapper;
     @Autowired
     private LiveEvents liveEvents;
+    @Autowired
+    private IUsersManagement uis;
+    @Autowired
+    private FirebaseNotificationService appNotificationService;
 
     @PostMapping("/state")
     public void state(@RequestBody String html) throws Exception {
@@ -31,5 +39,10 @@ public class TestController {
     @GetMapping("/notif/{id}")
     public void st1ate(@PathVariable("id") Integer id) throws Exception {
         liveEvents.apiReturnedValue = id;
+    }
+
+    @GetMapping("/n")
+    public void ste1ate(){
+        appNotificationService.sendNotif(ServiceType.EVENT, EventType.DB_SCRAMBLE);
     }
 }

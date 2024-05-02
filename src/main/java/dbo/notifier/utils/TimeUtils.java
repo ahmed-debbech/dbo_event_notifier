@@ -30,7 +30,7 @@ public class TimeUtils {
             }
             d.add(r);
         }
-        System.err.println(d);
+        //System.err.println(d);
         return d;
     }
 

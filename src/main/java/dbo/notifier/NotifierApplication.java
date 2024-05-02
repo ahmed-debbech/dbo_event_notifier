@@ -1,7 +1,7 @@
 package dbo.notifier;
 
 import dbo.notifier.services.*;
-import dbo.notifier.services.firebase.AppNotificationService;
+import dbo.notifier.services.firebase.FirebaseNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.TimeZone;
 
 @EnableScheduling
@@ -19,7 +20,7 @@ public class NotifierApplication {
 	private ILiveEvents liveEvents;
 
 	@Autowired
-	private AppNotificationService appNotifierService;
+	private FirebaseNotificationService appNotifierService;
 
 	@Autowired
 	private IScrapper scrapper;
@@ -33,6 +34,7 @@ public class NotifierApplication {
 	@PostConstruct
 	private void postConstruct() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+		System.out.println("Current time: " + (new Date()));
 		appNotifierService.init();
 		scrapper.launch();
 	}

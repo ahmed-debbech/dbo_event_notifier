@@ -3,7 +3,7 @@ package dbo.notifier.services;
 import dbo.notifier.logger.LogLiveEvents;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ServiceType;
-import dbo.notifier.services.firebase.AppNotificationService;
+import dbo.notifier.services.firebase.FirebaseNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -50,7 +50,7 @@ public class LiveEvents implements ILiveEvents {
     @Autowired
     private IDatabaseApi database;
     @Autowired
-    private AppNotificationService appNotificationService;
+    private FirebaseNotificationService appNotificationService;
 
     public int[] listOfNewEvents = new int[21];
     public int[] listOfOldEvents = new int[21];
@@ -100,7 +100,7 @@ public class LiveEvents implements ILiveEvents {
 
         this.listOfOldEvents = this.listOfNewEvents;
         this.listOfNewEvents = getFromBinary(ev);
-
+        System.err.println(apiReturnedValue +"  " + ev);
         if((ev != apiReturnedValue) && (apiReturnedValue != 0)) {
             for(int i = 0; i<=this.listOfNewEvents.length-1; i++){
                 List<Integer> p = searchForNewEvents();
@@ -149,9 +149,9 @@ public class LiveEvents implements ILiveEvents {
         RestTemplate restTemplate = new RestTemplate();
         String url = urlTelegram;
         try {
-            url += URLEncoder.encode(event.name() + " event is starting now!", StandardCharsets.UTF_8.toString());
+            url += URLEncoder.encode(event.name() + " event is starting now...", StandardCharsets.UTF_8.toString());
             restTemplate.getForEntity(url, String.class);
-            database.addNewEvent(event.name(), String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) + "000");
+            database.addNewEvent(event.name(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
             appNotificationService.sendNotif(ServiceType.EVENT, event);
         } catch (UnsupportedEncodingException e) {
             out.log("could not access telegram to notify for world boss");

@@ -3,7 +3,7 @@ package dbo.notifier.services;
 import dbo.notifier.dto.BossProgress;
 import dbo.notifier.logger.LogWorldBoss;
 import dbo.notifier.services.enumeration.ServiceType;
-import dbo.notifier.services.firebase.AppNotificationService;
+import dbo.notifier.services.firebase.FirebaseNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
 import org.apache.http.client.HttpClient;
@@ -38,13 +38,13 @@ public class WorldBossService {
     @Value("${trust-store-password}")
     private String trustStorePassword;
 
-    @Value("${telegram.url}")
+    @Value("${telegram.url.test}")
     String urlTelegram;
 
     @Autowired
     private IDatabaseApi database;
     @Autowired
-    private AppNotificationService appNotificationService;
+    private FirebaseNotificationService appNotificationService;
     public double percentageProgress = -1;
 
     public void check(){
