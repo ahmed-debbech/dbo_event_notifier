@@ -20,7 +20,7 @@ public class ScheduledEvents implements IScheduledEvents {
     private IScrapper scrapper;
     @Autowired
     private ILiveEvents liveEvents;
-    private EventType event_of_the_week;
+    private EventType event_of_the_week = null;
 
     private Map<ScheduledEventNames, String> lastDate = new HashMap<>();
 
@@ -33,7 +33,10 @@ public class ScheduledEvents implements IScheduledEvents {
         }else {
             scheduledEvents.setCurrent_events(liveEvents.getList());
         }
-        scheduledEvents.setEvent_of_the_week(event_of_the_week.name());
+        if(event_of_the_week!=null)
+            scheduledEvents.setEvent_of_the_week(event_of_the_week.name());
+        else
+            scheduledEvents.setEvent_of_the_week(null);
         try {
             scheduledEvents.setAdult_solo_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.ADULT_SOLO_BUDOKAI).getTime()));
             scheduledEvents.setAdult_party_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.ADULT_PARTY_BUDOKAI).getTime()));
@@ -120,11 +123,7 @@ public class ScheduledEvents implements IScheduledEvents {
                     if (!lastDate.get(ScheduledEventNames.DB_SCRAMBLE).equals(TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime()))))
                         liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
                 }else{
-                    try {
-                        liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
-                    }catch(Exception e){
-                        System.err.println("not");
-                    }
+                    liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
                 }
                 lastDate.put(ScheduledEventNames.DB_SCRAMBLE, TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime())));
             }

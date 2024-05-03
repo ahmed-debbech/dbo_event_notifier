@@ -153,8 +153,8 @@ public class LiveEvents implements ILiveEvents {
             restTemplate.getForEntity(url, String.class);
             database.addNewEvent(event.name(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
             appNotificationService.sendNotif(ServiceType.EVENT, event);
-        } catch (UnsupportedEncodingException e) {
-            out.log("could not access telegram to notify for world boss");
+        } catch (Exception e) {
+            out.log("something went wrong while sending to telegram or adding to DB or sending notif through firebase");
         }
     }
     private int getCurrentEvents(){

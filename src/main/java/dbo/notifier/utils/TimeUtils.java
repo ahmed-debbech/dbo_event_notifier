@@ -35,6 +35,7 @@ public class TimeUtils {
     }
 
     public static Date parseTime(String time, Date g){
+        //System.err.println("fff " + g);
         String h = "";
         String m = "";
         int s = 0;
@@ -63,10 +64,9 @@ public class TimeUtils {
                 mn = Integer.parseInt(m);
             }
         }
-        g.setHours(hn);
-        g.setMinutes(mn);
-        g.setSeconds(s);
-        return g;
+        Calendar timee = Calendar.getInstance();
+        timee.setTime(new Date(g.getYear(), g.getMonth(), g.getDate(), hn, mn, s));
+        return timee.getTime();
     }
     public static List<Date> getBySchedule(List<Date> d, List<Event> events){
         int i = 0;

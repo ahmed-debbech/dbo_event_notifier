@@ -93,7 +93,6 @@ public class Scrapper implements IScrapper{
 
         List<Date> d = TimeUtils.getByCountdown(events);
         d = TimeUtils.getBySchedule(d,events);
-        //System.err.println(d);
         Date min = d.get(0);
         for(int i =1; i<=d.size()-1; i++){
             if(d.get(i).before(min)){
