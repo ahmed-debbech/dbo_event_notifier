@@ -20,7 +20,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
 
     private FBLogger out = new FBLogger();
 
-    @Value("${firebase.test.root}")
+    @Value("${firebase.root}")
     private String rootPath;
 
     @Override

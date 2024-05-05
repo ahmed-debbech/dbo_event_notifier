@@ -9,5 +9,4 @@ public interface ILiveEvents {
 
     void check();
 
-    void notifyUsers(EventType event);
 }

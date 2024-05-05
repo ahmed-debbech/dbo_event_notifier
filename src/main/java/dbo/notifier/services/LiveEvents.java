@@ -9,6 +9,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -33,6 +34,8 @@ public class LiveEvents implements ILiveEvents {
 
     private LogLiveEvents out = new LogLiveEvents();
 
+    @Autowired
+    private INotifier notifierAgent;
 
     public int apiReturnedValue = 0;
 
@@ -42,15 +45,9 @@ public class LiveEvents implements ILiveEvents {
     @Value("${trust-store-password}")
     private String trustStorePassword;
 
-    @Value("${telegram.url.test}")
-    String urlTelegram;
 
     Map<String, Integer> eventNumber;
 
-    @Autowired
-    private IDatabaseApi database;
-    @Autowired
-    private FirebaseNotificationService appNotificationService;
 
     public int[] listOfNewEvents = new int[21];
     public int[] listOfOldEvents = new int[21];
@@ -146,16 +143,7 @@ public class LiveEvents implements ILiveEvents {
 
     public void notifyUsers(EventType event){
         out.log("Notifying users: FOR EVENT: " + event.name());
-        RestTemplate restTemplate = new RestTemplate();
-        String url = urlTelegram;
-        try {
-            url += URLEncoder.encode(event.name() + " event is starting now...", StandardCharsets.UTF_8.toString());
-            restTemplate.getForEntity(url, String.class);
-            database.addNewEvent(event.name(), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
-            appNotificationService.sendNotif(ServiceType.EVENT, event);
-        } catch (Exception e) {
-            out.log("something went wrong while sending to telegram or adding to DB or sending notif through firebase");
-        }
+        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, event);
     }
     private int getCurrentEvents(){
         out.log("retreiving api of current events : " + LocalDateTime.now());

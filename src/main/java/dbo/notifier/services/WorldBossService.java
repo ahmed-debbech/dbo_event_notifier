@@ -38,13 +38,12 @@ public class WorldBossService {
     @Value("${trust-store-password}")
     private String trustStorePassword;
 
-    @Value("${telegram.url.test}")
-    String urlTelegram;
-
     @Autowired
     private IDatabaseApi database;
+
     @Autowired
-    private FirebaseNotificationService appNotificationService;
+    private INotifier notifierAgent;
+
     public double percentageProgress = -1;
 
     public void check(){
@@ -64,16 +63,7 @@ public class WorldBossService {
 
     private void notifyUsers(){
         out.log("Notifying users: world boss is 95%");
-        RestTemplate restTemplate = new RestTemplate();
-        String url = urlTelegram;
-        try {
-            url += URLEncoder.encode("Hurry up World boss is 95 percent. get ready.", StandardCharsets.UTF_8.toString());
-            restTemplate.getForEntity(url, String.class);
-            database.addNewWorldBoss(String.valueOf(new Date().getTime()));
-            appNotificationService.sendNotif(ServiceType.WORLD_BOSS);
-        } catch (Exception e) {
-            out.log("could not access telegram to notify for world boss");
-        }
+        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.WORLD_BOSS);
     }
     private boolean is100(double per){
         if(per >= 95.0){

@@ -3,6 +3,7 @@ package dbo.notifier.services;
 import dbo.notifier.logger.LogScheduled;
 import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.enumeration.EventType;
+import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ import java.util.Map;
 public class ScheduledEvents implements IScheduledEvents {
 
     private LogScheduled out =  new LogScheduled();
+
+    @Autowired
+    private INotifier notifierAgent;
 
     @Autowired
     private IScrapper scrapper;
@@ -76,54 +80,54 @@ public class ScheduledEvents implements IScheduledEvents {
             if(now.after(adult_solo)){
                 if(lastDate.containsKey(ScheduledEventNames.ADULT_SOLO_BUDOKAI)) {
                     if (!lastDate.get(ScheduledEventNames.ADULT_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_solo.getTime()))))
-                        liveEvents.notifyUsers(EventType.BUDO_ADULT_SOLO);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_SOLO);
                 }else{
-                    liveEvents.notifyUsers(EventType.BUDO_ADULT_SOLO);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_SOLO);
                 }
                 lastDate.put(ScheduledEventNames.ADULT_SOLO_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(adult_solo.getTime())));
             }
             if(now.after(adult_party)){
                 if(lastDate.containsKey(ScheduledEventNames.ADULT_PARTY_BUDOKAI)) {
                     if (!lastDate.get(ScheduledEventNames.ADULT_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_party.getTime()))))
-                        liveEvents.notifyUsers(EventType.BUDO_ADULT_TEAM);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_TEAM);
                 }else{
-                    liveEvents.notifyUsers(EventType.BUDO_ADULT_TEAM);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_TEAM);
                 }
                 lastDate.put(ScheduledEventNames.ADULT_PARTY_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(adult_party.getTime())));
             }
             if(now.after(kid_solo)){
                 if(lastDate.containsKey(ScheduledEventNames.KID_SOLO_BUDOKAI)) {
                     if (!lastDate.get(ScheduledEventNames.KID_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_solo.getTime()))))
-                        liveEvents.notifyUsers(EventType.BUDO_KID_SOLO);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_SOLO);
                 }else{
-                    liveEvents.notifyUsers(EventType.BUDO_KID_SOLO);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_SOLO);
                 }
                 lastDate.put(ScheduledEventNames.KID_SOLO_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(kid_solo.getTime())));
             }
             if(now.after(kid_party)){
                 if(lastDate.containsKey(ScheduledEventNames.KID_PARTY_BUDOKAI)) {
                     if (!lastDate.get(ScheduledEventNames.KID_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_party.getTime()))))
-                        liveEvents.notifyUsers(EventType.BUDO_KID_TEAM);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_TEAM);
                 }else{
-                    liveEvents.notifyUsers(EventType.BUDO_KID_TEAM);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_TEAM);
                 }
                 lastDate.put(ScheduledEventNames.KID_PARTY_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(kid_party.getTime())));
             }
             if(now.after(dojo_war)){
                 if(lastDate.containsKey(ScheduledEventNames.DOJO_WAR)) {
                     if (!lastDate.get(ScheduledEventNames.DOJO_WAR).equals(TimeUtils.removeMillisecondsPart(String.valueOf(dojo_war.getTime()))))
-                        liveEvents.notifyUsers(EventType.DOJO_WAR);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DOJO_WAR);
                 }else{
-                    liveEvents.notifyUsers(EventType.DOJO_WAR);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DOJO_WAR);
                 }
                 lastDate.put(ScheduledEventNames.DOJO_WAR, TimeUtils.removeMillisecondsPart(String.valueOf(dojo_war.getTime())));
             }
             if(now.after(db_scramble)){
                 if(lastDate.containsKey(ScheduledEventNames.DB_SCRAMBLE)) {
                     if (!lastDate.get(ScheduledEventNames.DB_SCRAMBLE).equals(TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime()))))
-                        liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
+                        notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DB_SCRAMBLE);
                 }else{
-                    liveEvents.notifyUsers(EventType.DB_SCRAMBLE);
+                    notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DB_SCRAMBLE);
                 }
                 lastDate.put(ScheduledEventNames.DB_SCRAMBLE, TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime())));
             }
