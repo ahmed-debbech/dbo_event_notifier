@@ -32,11 +32,8 @@ public class ScheduledEvents implements IScheduledEvents {
     public dbo.notifier.dto.ScheduledEvents getState() {
         out.log("getting state...");
         dbo.notifier.dto.ScheduledEvents scheduledEvents = new dbo.notifier.dto.ScheduledEvents();
-        if(liveEvents.getList() == null){
-            scheduledEvents.setCurrent_events(null);
-        }else {
-            scheduledEvents.setCurrent_events(liveEvents.getList());
-        }
+        scheduledEvents.setCurrent_events(liveEvents.getList());
+
         if(event_of_the_week!=null)
             scheduledEvents.setEvent_of_the_week(event_of_the_week.name());
         else

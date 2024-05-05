@@ -55,7 +55,6 @@ public class LiveEvents implements ILiveEvents {
     @Override
     public List<Integer> getList() {
         List<Integer> list = new ArrayList<>();
-        if(this.listOfNewEvents == null) return null;
         for(int i = 0; i<=this.listOfNewEvents.length-1; i++)
             list.add(this.listOfNewEvents[i]);
         return list;
