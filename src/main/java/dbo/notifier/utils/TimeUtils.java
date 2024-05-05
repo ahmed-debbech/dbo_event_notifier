@@ -13,20 +13,27 @@ public class TimeUtils {
             Date r = new Date();
             int count = Integer.parseInt(ev.getCountdown().split(" ")[0]);
             String countUnit = ev.getCountdown().split(" ")[1].substring(0,2);
-            Calendar c = Calendar.getInstance();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(r);
+
+            long milliseconds = calendar.getTimeInMillis();
+            Date date = new Date(milliseconds);
             if(countUnit.equals("da")) {
-                r.setDate(r.getDate() + count);
+                calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + count);
             }
             if(countUnit.equals("ho")) {
-                r.setHours(r.getHours() + count);
+                calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + count);
             }
             if(countUnit.equals("mi")) {
-                r.setMinutes(r.getMinutes() + count);
+                calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + count);
             }
             if(countUnit.equals("se")) {
-                r.setSeconds(r.getSeconds() + count);
+                calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + count);
             }
-            d.add(r);
+
+            long milliseconds1 = calendar.getTimeInMillis();
+            Date date1 = new Date(milliseconds1);
+            d.add(date1);
         }
         //System.err.println(d);
         return d;
