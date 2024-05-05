@@ -95,7 +95,7 @@ public class Scrapper implements IScrapper{
         d = TimeUtils.getBySchedule(d,events);
         Date min = d.get(0);
         for(int i =1; i<=d.size()-1; i++){
-            if(d.get(i).before(min)){
+            if((d.get(i).before(min)) && (d.get(i).after(new Date()))){
                 min = d.get(i);
             }
         }
