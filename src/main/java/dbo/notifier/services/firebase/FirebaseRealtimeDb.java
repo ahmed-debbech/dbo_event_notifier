@@ -2,7 +2,7 @@ package dbo.notifier.services.firebase;
 
 import com.google.firebase.database.*;
 import dbo.notifier.dto.NewsMessage;
-import dbo.notifier.logger.FBLogger;
+import dbo.notifier.logger.LogFirebase;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.NotifConfig;
 import dbo.notifier.model.User;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class FirebaseRealtimeDb implements IDatabaseApi {
 
-    private FBLogger out = new FBLogger();
+    private LogFirebase out = new LogFirebase();
 
     @Value("${firebase.root}")
     private String rootPath;

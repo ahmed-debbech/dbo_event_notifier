@@ -2,10 +2,8 @@ package dbo.notifier.utils;
 
 import dbo.notifier.model.Event;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class TimeUtils {
     public static List<Date> getByCountdown(List<Event> events){
@@ -64,9 +62,21 @@ public class TimeUtils {
                 mn = Integer.parseInt(m);
             }
         }
-        Calendar timee = Calendar.getInstance();
-        timee.setTime(new Date(g.getYear(), g.getMonth(), g.getDate(), hn, mn, s));
-        return timee.getTime();
+        //Calendar.set(year + 1900, month, date, hrs, min, sec)
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(g);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) ;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month); // Note: Calendar.MONTH is zero-based
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hn); // 24-hour clock
+        calendar.set(Calendar.MINUTE, mn);
+        calendar.set(Calendar.SECOND, s);
+        long milliseconds = calendar.getTimeInMillis();
+        Date date = new Date(milliseconds);
+        return date;
     }
     public static List<Date> getBySchedule(List<Date> d, List<Event> events){
         int i = 0;

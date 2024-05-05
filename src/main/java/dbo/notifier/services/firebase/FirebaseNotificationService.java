@@ -4,7 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
-import dbo.notifier.logger.FBLogger;
+import dbo.notifier.logger.LogFirebase;
 import dbo.notifier.model.User;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ServiceType;
@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class FirebaseNotificationService {
 
-    private FBLogger out = new FBLogger();
+    private LogFirebase out = new LogFirebase();
 
     @Autowired
     private UsersManagement usersManagement;
