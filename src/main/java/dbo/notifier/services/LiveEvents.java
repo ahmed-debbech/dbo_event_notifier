@@ -90,7 +90,6 @@ public class LiveEvents implements ILiveEvents {
 
     public void check(){
         out.log("checking all current events at: " + LocalDateTime.now());
-        System.err.println(apiReturnedValue);
         prepareDict();
         int ev = getCurrentEvents();
 
