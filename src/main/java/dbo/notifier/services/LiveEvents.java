@@ -5,6 +5,7 @@ import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.firebase.FirebaseNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
+import dbo.notifier.utils.SystemUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClients;
@@ -24,10 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class LiveEvents implements ILiveEvents {
@@ -49,8 +47,8 @@ public class LiveEvents implements ILiveEvents {
     Map<String, Integer> eventNumber;
 
 
-    public int[] listOfNewEvents = new int[21];
-    public int[] listOfOldEvents = new int[21];
+    public int[] listOfNewEvents = new int[30];
+    public int[] listOfOldEvents = new int[30];
 
     @Override
     public List<Integer> getList() {
@@ -96,6 +94,10 @@ public class LiveEvents implements ILiveEvents {
         this.listOfOldEvents = this.listOfNewEvents;
         this.listOfNewEvents = getFromBinary(ev);
         System.err.println(apiReturnedValue +"  " + ev);
+
+        out.log("new events: " + Arrays.toString(this.listOfNewEvents));
+        out.log("old events: " + Arrays.toString(this.listOfOldEvents));
+
         if((ev != apiReturnedValue) && (apiReturnedValue != 0)) {
             for(int i = 0; i<=this.listOfNewEvents.length-1; i++){
                 List<Integer> p = searchForNewEvents();
@@ -178,14 +180,14 @@ public class LiveEvents implements ILiveEvents {
      * extracts current events from (int) number from api
      * and creates array mapping multiple two of current events
      * @param ev number of all events to be represtened in binary
-     * @return int[] like [2,4,128,256] => the current live events to be mapped
+     * @return int[] like [2,0,0,0,4,128,0,0,0,256] (max 30) => the current live events to be mapped
      */
     private int[] getFromBinary(int ev){
-        String binary = Integer.toBinaryString(ev);
+        String binary = SystemUtils.intToBinaryString(ev, 30);
         int iter = 1;
         binary = new StringBuilder().append(binary).reverse().toString();
-        int [] currEvents = new int[this.eventNumber.size()];
-        int h = 1;
+        int [] currEvents = new int[30];
+        int h = 0;
         for(int i=0; i<=binary.length()-1; i++){
             if(binary.charAt(i) == '1'){
                 out.log("event running: " + iter);
@@ -196,7 +198,6 @@ public class LiveEvents implements ILiveEvents {
             iter = iter * 2;
             h++;
         }
-        currEvents[0] = 0;
         return currEvents;
     }
 

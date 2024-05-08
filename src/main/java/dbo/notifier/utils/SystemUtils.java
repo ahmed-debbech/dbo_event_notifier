@@ -23,4 +23,25 @@ public class SystemUtils {
         }
         return false;
     }
+    public static String intToBinaryString(int number, int fixedLength) {
+        // Convert the integer to binary string
+        String binary = Integer.toBinaryString(number);
+
+        // Calculate the number of zeros to pad
+        int zerosToPad = fixedLength - binary.length();
+
+        // Create a StringBuilder to construct the padded binary string
+        StringBuilder paddedBinary = new StringBuilder();
+
+        // Append zeros to the binary string
+        for (int i = 0; i < zerosToPad; i++) {
+            paddedBinary.append('0');
+        }
+
+        // Append the original binary string
+        paddedBinary.append(binary);
+
+        // Return the padded binary string
+        return paddedBinary.toString();
+    }
 }
