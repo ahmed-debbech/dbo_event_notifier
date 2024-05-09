@@ -85,7 +85,6 @@ public class Scrapper implements IScrapper{
     }
 
     private Date least(List<Event> events){
-        out.log("Getting the closest next event...");
         if(events == null || events.isEmpty()){
             out.log("empty events.. nothing parsed");
             return null;

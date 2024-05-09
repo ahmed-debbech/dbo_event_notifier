@@ -99,30 +99,28 @@ public class LiveEvents implements ILiveEvents {
         out.log("old events: " + Arrays.toString(this.listOfOldEvents));
 
         if((ev != apiReturnedValue) && (apiReturnedValue != 0)) {
-            for(int i = 0; i<=this.listOfNewEvents.length-1; i++){
-                List<Integer> p = searchForNewEvents();
-                if(!p.isEmpty()){
-                    for(int j=0; j<=p.size()-1; j++) {
-                        switch (p.get(j)) {
-                            case 2:
-                                notifyUsers(EventType.DB_SCRAMBLE);
-                                break;
-                            case 4:
-                                notifyUsers(EventType.DOJO_WAR);
-                                break;
-                            case 8:
-                                notifyUsers(EventType.BUDO_KID_SOLO);
-                                break;
-                            case 16:
-                                notifyUsers(EventType.BUDO_KID_TEAM);
-                                break;
-                            case 32:
-                                notifyUsers(EventType.BUDO_ADULT_SOLO);
-                                break;
-                            case 64:
-                                notifyUsers(EventType.BUDO_ADULT_TEAM);
-                                break;
-                        }
+            List<Integer> p = searchForNewEvents();
+            if(!p.isEmpty()) {
+                for (int i = 0; i <= p.size() - 1; i++) {
+                    switch (p.get(i)) {
+                        case 2:
+                            notifyUsers(EventType.DB_SCRAMBLE);
+                            break;
+                        case 4:
+                            notifyUsers(EventType.DOJO_WAR);
+                            break;
+                        case 8:
+                            notifyUsers(EventType.BUDO_KID_SOLO);
+                            break;
+                        case 16:
+                            notifyUsers(EventType.BUDO_KID_TEAM);
+                            break;
+                        case 32:
+                            notifyUsers(EventType.BUDO_ADULT_SOLO);
+                            break;
+                        case 64:
+                            notifyUsers(EventType.BUDO_ADULT_TEAM);
+                            break;
                     }
                 }
             }

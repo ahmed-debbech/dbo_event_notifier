@@ -55,7 +55,7 @@ public class ScheduledEvents implements IScheduledEvents {
 
     @Override
     public void checkScheduledEvents(){
-        out.log("checking timeout of scheduled events");
+        out.log(" ==== checking timeout of scheduled events ====");
         try {
             Date adult_solo = scrapper.getClosestDate(ScheduledEventNames.ADULT_SOLO_BUDOKAI);
             Date adult_party = scrapper.getClosestDate(ScheduledEventNames.ADULT_PARTY_BUDOKAI);
