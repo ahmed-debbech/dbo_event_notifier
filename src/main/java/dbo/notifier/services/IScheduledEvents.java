@@ -7,4 +7,5 @@ public interface IScheduledEvents {
     ScheduledEvents getState();
     void checkScheduledEvents();
     void setEventOfTheWeek(EventType event);
+    void setSpecialEvent(EventType event);
 }

@@ -23,14 +23,24 @@ public class UsersController {
     @Autowired
     private IScheduledEvents scheduledEvents;
 
-    @GetMapping("/update_event/{event}")
-    public ResponseEntity<Boolean> modify (@PathVariable("event") String event) {
+    @GetMapping("/admin/week/{event}")
+    public ResponseEntity<Boolean> week (@PathVariable("event") String event) {
 
         if(EnumUtils.eventTypeContains(event)) {
             scheduledEvents.setEventOfTheWeek(EventType.valueOf(event));
             return new ResponseEntity<>(true ,HttpStatus.OK);
         }
         scheduledEvents.setEventOfTheWeek(null);
+        return new ResponseEntity<>(false ,HttpStatus.NOT_FOUND);
+    }
+    @GetMapping("/admin/special/{event}")
+    public ResponseEntity<Boolean> special (@PathVariable("event") String event) {
+
+        if(EnumUtils.eventTypeContains(event)) {
+            scheduledEvents.setSpecialEvent(EventType.valueOf(event));
+            return new ResponseEntity<>(true ,HttpStatus.OK);
+        }
+        scheduledEvents.setSpecialEvent(null);
         return new ResponseEntity<>(false ,HttpStatus.NOT_FOUND);
     }
     @PostMapping("/refresh")

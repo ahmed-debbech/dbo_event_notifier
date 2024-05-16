@@ -1,6 +1,7 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogScheduled;
+import dbo.notifier.services.enumeration.EnumUtils;
 import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ServiceType;
@@ -8,6 +9,8 @@ import dbo.notifier.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +27,11 @@ public class ScheduledEvents implements IScheduledEvents {
     private IScrapper scrapper;
     @Autowired
     private ILiveEvents liveEvents;
+    @Autowired
+    private ILastEvents lastEventsService;
+
     private EventType event_of_the_week = null;
+    private EventType special_event = null;
 
     private Map<ScheduledEventNames, String> lastDate = new HashMap<>();
 
@@ -38,13 +45,31 @@ public class ScheduledEvents implements IScheduledEvents {
             scheduledEvents.setEvent_of_the_week(event_of_the_week.name());
         else
             scheduledEvents.setEvent_of_the_week(null);
+
+        if(special_event!=null)
+            scheduledEvents.setSpecial_event(special_event.name());
+        else
+            scheduledEvents.setSpecial_event(null);
+
         try {
             scheduledEvents.setAdult_solo_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.ADULT_SOLO_BUDOKAI).getTime()));
+            scheduledEvents.setPast_adult_solo_budokai(lastEventsService.getLastEvents().get(ScheduledEventNames.ADULT_SOLO_BUDOKAI));
+
             scheduledEvents.setAdult_party_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.ADULT_PARTY_BUDOKAI).getTime()));
+            scheduledEvents.setPast_adult_party_budokai(lastEventsService.getLastEvents().get(ScheduledEventNames.ADULT_PARTY_BUDOKAI));
+
             scheduledEvents.setKid_solo_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.KID_SOLO_BUDOKAI).getTime()));
+            scheduledEvents.setPast_kid_solo_budokai(lastEventsService.getLastEvents().get(ScheduledEventNames.KID_SOLO_BUDOKAI));
+
             scheduledEvents.setKid_party_budokai(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.KID_PARTY_BUDOKAI).getTime()));
+            scheduledEvents.setPast_kid_party_budokai(lastEventsService.getLastEvents().get(ScheduledEventNames.KID_PARTY_BUDOKAI));
+
             scheduledEvents.setDb_scramble(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.DB_SCRAMBLE).getTime()));
+            scheduledEvents.setPast_db_scramble(lastEventsService.getLastEvents().get(ScheduledEventNames.DB_SCRAMBLE));
+
             scheduledEvents.setDojo_war(String.valueOf(scrapper.getClosestDate(ScheduledEventNames.DOJO_WAR).getTime()));
+            scheduledEvents.setPast_dojo_war(lastEventsService.getLastEvents().get(ScheduledEventNames.DOJO_WAR));
+
         }catch (Exception e){
             out.log("CRASHED during getting state!");
             return null;
@@ -76,54 +101,72 @@ public class ScheduledEvents implements IScheduledEvents {
             Date now = new Date();
             if(now.after(adult_solo)){
                 if(lastDate.containsKey(ScheduledEventNames.ADULT_SOLO_BUDOKAI)) {
-                    if (!lastDate.get(ScheduledEventNames.ADULT_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_solo.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.ADULT_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_solo.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.ADULT_SOLO_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_SOLO);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.ADULT_SOLO_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_SOLO);
                 }
                 lastDate.put(ScheduledEventNames.ADULT_SOLO_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(adult_solo.getTime())));
             }
             if(now.after(adult_party)){
                 if(lastDate.containsKey(ScheduledEventNames.ADULT_PARTY_BUDOKAI)) {
-                    if (!lastDate.get(ScheduledEventNames.ADULT_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_party.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.ADULT_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(adult_party.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.ADULT_PARTY_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_TEAM);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.ADULT_PARTY_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_ADULT_TEAM);
                 }
                 lastDate.put(ScheduledEventNames.ADULT_PARTY_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(adult_party.getTime())));
             }
             if(now.after(kid_solo)){
                 if(lastDate.containsKey(ScheduledEventNames.KID_SOLO_BUDOKAI)) {
-                    if (!lastDate.get(ScheduledEventNames.KID_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_solo.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.KID_SOLO_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_solo.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.KID_SOLO_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_SOLO);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.KID_SOLO_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_SOLO);
                 }
                 lastDate.put(ScheduledEventNames.KID_SOLO_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(kid_solo.getTime())));
             }
             if(now.after(kid_party)){
                 if(lastDate.containsKey(ScheduledEventNames.KID_PARTY_BUDOKAI)) {
-                    if (!lastDate.get(ScheduledEventNames.KID_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_party.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.KID_PARTY_BUDOKAI).equals(TimeUtils.removeMillisecondsPart(String.valueOf(kid_party.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.KID_PARTY_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_TEAM);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.KID_PARTY_BUDOKAI, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.BUDO_KID_TEAM);
                 }
                 lastDate.put(ScheduledEventNames.KID_PARTY_BUDOKAI, TimeUtils.removeMillisecondsPart(String.valueOf(kid_party.getTime())));
             }
             if(now.after(dojo_war)){
                 if(lastDate.containsKey(ScheduledEventNames.DOJO_WAR)) {
-                    if (!lastDate.get(ScheduledEventNames.DOJO_WAR).equals(TimeUtils.removeMillisecondsPart(String.valueOf(dojo_war.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.DOJO_WAR).equals(TimeUtils.removeMillisecondsPart(String.valueOf(dojo_war.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.DOJO_WAR, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DOJO_WAR);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.DOJO_WAR, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DOJO_WAR);
                 }
                 lastDate.put(ScheduledEventNames.DOJO_WAR, TimeUtils.removeMillisecondsPart(String.valueOf(dojo_war.getTime())));
             }
             if(now.after(db_scramble)){
                 if(lastDate.containsKey(ScheduledEventNames.DB_SCRAMBLE)) {
-                    if (!lastDate.get(ScheduledEventNames.DB_SCRAMBLE).equals(TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime()))))
+                    if (!lastDate.get(ScheduledEventNames.DB_SCRAMBLE).equals(TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime())))) {
+                        lastEventsService.setEvent(ScheduledEventNames.DB_SCRAMBLE, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DB_SCRAMBLE);
+                    }
                 }else{
+                    lastEventsService.setEvent(ScheduledEventNames.DB_SCRAMBLE, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
                     notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, EventType.DB_SCRAMBLE);
                 }
                 lastDate.put(ScheduledEventNames.DB_SCRAMBLE, TimeUtils.removeMillisecondsPart(String.valueOf(db_scramble.getTime())));
@@ -140,5 +183,11 @@ public class ScheduledEvents implements IScheduledEvents {
     public void setEventOfTheWeek(EventType event_of_the_week) {
         out.log("setting event of the week");
         this.event_of_the_week = event_of_the_week;
+    }
+
+    @Override
+    public void setSpecialEvent(EventType event) {
+        out.log("setting special event");
+        this.special_event = event;
     }
 }

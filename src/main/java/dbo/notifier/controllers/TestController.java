@@ -1,5 +1,6 @@
 package dbo.notifier.controllers;
 
+import dbo.notifier.services.ILastEvents;
 import dbo.notifier.services.IUsersManagement;
 import dbo.notifier.services.enumeration.EventType;
 import dbo.notifier.services.enumeration.ScheduledEventNames;
@@ -9,6 +10,8 @@ import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.firebase.FirebaseNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 // the annotations below are disabled for not to be used in production
@@ -24,6 +27,8 @@ public class TestController {
     private IUsersManagement uis;
     @Autowired
     private FirebaseNotificationService appNotificationService;
+    @Autowired
+    private ILastEvents lastEvents;
 
     @PostMapping("/state")
     public void state(@RequestBody String html) throws Exception {
@@ -44,5 +49,9 @@ public class TestController {
     @GetMapping("/n")
     public void ste1ate(){
         appNotificationService.sendNotif(ServiceType.EVENT, EventType.DB_SCRAMBLE);
+    }
+    @GetMapping("/n1")
+    public Map<ScheduledEventNames, String> steate(){
+        return lastEvents.getLastEvents();
     }
 }

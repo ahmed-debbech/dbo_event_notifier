@@ -30,7 +30,6 @@ public class AppController {
 
     @GetMapping("/state")
     public ResponseEntity<ScheduledEvents> next(){
-
         ScheduledEvents sc = eventsService.getState();
         return new ResponseEntity<>(sc ,HttpStatus.OK);
     }

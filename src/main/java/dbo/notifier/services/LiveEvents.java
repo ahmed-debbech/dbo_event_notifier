@@ -1,7 +1,9 @@
 package dbo.notifier.services;
 
 import dbo.notifier.logger.LogLiveEvents;
+import dbo.notifier.services.enumeration.EnumUtils;
 import dbo.notifier.services.enumeration.EventType;
+import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.enumeration.ServiceType;
 import dbo.notifier.services.firebase.FirebaseNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
@@ -34,6 +36,9 @@ public class LiveEvents implements ILiveEvents {
 
     @Autowired
     private INotifier notifierAgent;
+
+    @Autowired
+    private ILastEvents lastEventsService;
 
     public int apiReturnedValue = 0;
 
@@ -141,6 +146,7 @@ public class LiveEvents implements ILiveEvents {
 
     public void notifyUsers(EventType event){
         out.log("Notifying users: FOR EVENT: " + event.name());
+        lastEventsService.setEvent(EnumUtils.convertFrom(event), LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "000");
         notifierAgent.broadcastNotificationThroughEveryMedium(ServiceType.EVENT, event);
     }
     private int getCurrentEvents(){
