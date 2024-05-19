@@ -170,11 +170,17 @@ public class LiveEvents implements ILiveEvents {
                 new HttpComponentsClientHttpRequestFactory(httpClient);
 
         RestTemplate restTemplateWithTrustStore = new RestTemplate(factory);
+        ResponseEntity<String> response= null;
+        String resp = null;
 
-        ResponseEntity<String> response = restTemplateWithTrustStore
-                .getForEntity("https://patch.dboglobal.to:5000/currentEvents", String.class);
-
-        String resp = response.getBody();
+        try {
+            response = restTemplateWithTrustStore
+                    .getForEntity("https://patch.dboglobal.to:5000/currentEvents", String.class);
+            resp = response.getBody();
+        }catch (Exception e){
+            out.log("[ERROR] could not connect live events service");
+            resp = "0";
+        }
         int d = Integer.parseInt(resp);
         out.log("done retreiving at " + LocalDateTime.now());
         return d;

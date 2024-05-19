@@ -72,7 +72,7 @@ public class WorldBossService {
             return false;
         }
     }
-    private double getPercentageValue(){
+    private double getPercentageValue() {
         out.log("retreiving api of worldboss : " + LocalDateTime.now());
 
         SSLContext sslContext = null;
@@ -93,11 +93,17 @@ public class WorldBossService {
                 new HttpComponentsClientHttpRequestFactory(httpClient);
 
         RestTemplate restTemplateWithTrustStore = new RestTemplate(factory);
+        String resp = null;
+        ResponseEntity<String> response = null;
 
-        ResponseEntity<String> response = restTemplateWithTrustStore
-                .getForEntity("https://patch.dboglobal.to:5000/bossProgress", String.class);
-
-        String resp = response.getBody();
+        try {
+            response =  restTemplateWithTrustStore
+                    .getForEntity("https://patch.dboglobal.to:5000/bossProgress", String.class);
+            resp = response.getBody();
+        }catch (Exception e){
+            resp = "-1";
+            out.log("could not connect to world boss");
+        }
         double d = Double.parseDouble(resp);
         out.log("done retreiving and converting at " + LocalDateTime.now());
         return d;
