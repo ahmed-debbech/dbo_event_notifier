@@ -46,9 +46,18 @@ public class TestController {
         liveEvents.apiReturnedValue = id;
     }
 
-    @GetMapping("/n")
-    public void ste1ate(){
-        appNotificationService.sendNotif(ServiceType.EVENT, EventType.DB_SCRAMBLE);
+    @GetMapping("/n/{id}")
+    public void ste1ate(@PathVariable("id") int id){
+        EventType e = null;
+        switch (id){
+            case 1:
+                e=EventType.BUDO_ADULT_SOLO;
+                break;
+            case 2:
+                e = EventType.DB_SCRAMBLE;
+                break;
+        }
+        appNotificationService.sendNotif(ServiceType.EVENT, e);
     }
     @GetMapping("/n1")
     public Map<ScheduledEventNames, String> steate(){

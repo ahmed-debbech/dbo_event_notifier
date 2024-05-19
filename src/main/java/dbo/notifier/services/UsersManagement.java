@@ -3,7 +3,6 @@ package dbo.notifier.services;
 import dbo.notifier.model.NotifConfig;
 import dbo.notifier.model.User;
 import dbo.notifier.services.enumeration.EventType;
-import dbo.notifier.services.enumeration.ScheduledEventNames;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
 import org.springframework.beans.factory.annotation.Autowired;

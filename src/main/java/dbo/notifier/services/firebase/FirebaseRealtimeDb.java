@@ -6,7 +6,7 @@ import dbo.notifier.logger.LogFirebase;
 import dbo.notifier.model.FirebaseEvents;
 import dbo.notifier.model.NotifConfig;
 import dbo.notifier.model.User;
-import dbo.notifier.utils.FirebaseEventsConverter;
+import dbo.notifier.utils.FirebaseConverter;
 import dbo.notifier.utils.ResultRetreiver;
 import dbo.notifier.utils.UUIDGen;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +59,7 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.err.println(dataSnapshot);
                 Map<?,Map<String,String>> map = (Map<?, Map<String,String>>) dataSnapshot.getValue();
-                List<FirebaseEvents> fes = FirebaseEventsConverter.convert(map);
+                List<FirebaseEvents> fes = FirebaseConverter.convert(map);
                 ResultRetreiver.getInstance().add(n, fes);
             }
 
@@ -244,8 +244,9 @@ public class FirebaseRealtimeDb implements IDatabaseApi {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //System.err.println(dataSnapshot);
                 //List<String> fcms = ((Map<String, ?>) dataSnapshot.getValue()).keySet().stream().collect(Collectors.toList());
-                Map<String, ?> map = ((Map<String, ?>) dataSnapshot.getValue());
-                List<User> fcms = (List<User>) new ArrayList<>(map.values());
+                Map<String, Map<String, ?>> map = ((Map<String, Map<String, ?>>) dataSnapshot.getValue());
+
+                List<User> fcms = FirebaseConverter.convertUsers(map);
                 ResultRetreiver.getInstance().add(n, fcms);
             }
             @Override public void onCancelled(DatabaseError databaseError) {}
