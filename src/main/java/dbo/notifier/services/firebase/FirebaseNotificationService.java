@@ -118,6 +118,9 @@ public class FirebaseNotificationService {
                             .setBody(body)
                             .build())
                     .setToken(ids.getFcmToken())
+                    .setAndroidConfig(AndroidConfig.builder()
+                            .setPriority(AndroidConfig.Priority.HIGH)
+                            .build())
                     .build();
 
             String response;
