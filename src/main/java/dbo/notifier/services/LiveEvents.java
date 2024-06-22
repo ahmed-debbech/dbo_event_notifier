@@ -152,34 +152,12 @@ public class LiveEvents implements ILiveEvents {
     private int getCurrentEvents(){
         out.log("retreiving api of current events : " + LocalDateTime.now());
 
-        SSLContext sslContext = null;
-        try {
-            sslContext = new SSLContextBuilder()
-                    .loadTrustMaterial(
-                            trustStore.getURL(),
-                            trustStorePassword.toCharArray()
-                    ).build();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SSLConnectionSocketFactory socketFactory =
-                new SSLConnectionSocketFactory(sslContext);
-        HttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(socketFactory).build();
-        HttpComponentsClientHttpRequestFactory factory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
-
-        RestTemplate restTemplateWithTrustStore = new RestTemplate(factory);
-        ResponseEntity<String> response= null;
-        String resp = null;
-
-        try {
-            response = restTemplateWithTrustStore
-                    .getForEntity("https://patch.dboglobal.to:5000/currentEvents", String.class);
-            resp = response.getBody();
+        String resp;
+        try{
+            resp = SystemUtils.connectWithoutSSL("https://patch.dboglobal.to:5000/currentEvents");
         }catch (Exception e){
-            out.log("[ERROR] could not connect live events service");
-            resp = "0";
+            out.log(e.getMessage());
+            return 0;
         }
         int d = Integer.parseInt(resp);
         out.log("done retreiving at " + LocalDateTime.now());

@@ -3,13 +3,9 @@ package dbo.notifier.services;
 import dbo.notifier.dto.BossProgress;
 import dbo.notifier.logger.LogWorldBoss;
 import dbo.notifier.services.enumeration.ServiceType;
-import dbo.notifier.services.firebase.FirebaseNotificationService;
 import dbo.notifier.services.firebase.IDatabaseApi;
 import dbo.notifier.utils.ResultRetreiver;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
+import dbo.notifier.utils.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -18,11 +14,15 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import javax.net.ssl.SSLContext;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.net.http.HttpResponse;
+import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -74,35 +74,12 @@ public class WorldBossService {
     }
     private double getPercentageValue() {
         out.log("retreiving api of worldboss : " + LocalDateTime.now());
-
-        SSLContext sslContext = null;
-        try {
-            sslContext = new SSLContextBuilder()
-                    .loadTrustMaterial(
-                            trustStore.getURL(),
-                            trustStorePassword.toCharArray()
-                    ).build();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-        SSLConnectionSocketFactory socketFactory =
-                new SSLConnectionSocketFactory(sslContext);
-        HttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(socketFactory).build();
-        HttpComponentsClientHttpRequestFactory factory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
-
-        RestTemplate restTemplateWithTrustStore = new RestTemplate(factory);
-        String resp = null;
-        ResponseEntity<String> response = null;
-
-        try {
-            response =  restTemplateWithTrustStore
-                    .getForEntity("https://patch.dboglobal.to:5000/bossProgress", String.class);
-            resp = response.getBody();
+        String resp = "-1";
+        try{
+            resp = SystemUtils.connectWithoutSSL("https://patch.dboglobal.to:5000/bossProgress");
         }catch (Exception e){
-            resp = "-1";
-            out.log("could not connect to world boss");
+            out.log(e.getMessage());
+            return -1;
         }
         double d = Double.parseDouble(resp);
         out.log("done retreiving and converting at " + LocalDateTime.now());
